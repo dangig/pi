@@ -1,0 +1,26 @@
+{
+  "DisplayComponent": {
+    "kind": "type",
+    "value": {
+      "id": "DisplayComponent",
+      "selector": "display",
+      "compileChildren": true,
+      "hostProperties": {},
+      "hostListeners": {},
+      "hostActions": {},
+      "hostAttributes": {},
+      "properties": [],
+      "readAttributes": [],
+      "type": 1,
+      "exportAs": null,
+      "callOnDestroy": false,
+      "callOnCheck": false,
+      "callOnInit": false,
+      "callOnChange": false,
+      "callOnAllChangesDone": false,
+      "events": [],
+      "changeDetection": null,
+      "version": 1
+    }
+  }
+}

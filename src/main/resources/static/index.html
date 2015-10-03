@@ -1,0 +1,172 @@
+<!DOCTYPE html><!--
+  Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
+  is governed by a BSD-style license that can be found in the LICENSE file.
+--><html><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="scaffolded-by" content="https://github.com/google/stagehand">
+  <title>SampleWebApp</title>
+
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="icon" sizes="192x192" href="images/touch/chrome-touch-icon-192x192.png">
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Web Starter Kit">
+  <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-precomposed.png">
+
+  <!-- Tile icon for Win8 (144x144 + tile color) -->
+  <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+  <meta name="msapplication-TileColor" content="#3372DF">
+
+  <!-- TODO: Swap the two stylesheet references in order to use Sass (and
+       uncomment the sass transformer in the pubspec.yaml file. -->
+  <link rel="stylesheet" href="styles/main_gen.css">
+  <!-- link rel="stylesheet" href="styles/main.css" -->
+
+  <!-- DG : Load Google Charts -->
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+    google.load("visualization", "1", {packages:["gauge"]});
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+
+      var data = google.visualization.arrayToDataTable([
+        ['Label', 'Value'],
+        ['Temp 1', 72],
+        ['Temp 2', 60]
+      ]);
+
+      var options = {
+        width: 400, height: 120,
+        redFrom: 80, redTo: 100,
+        yellowFrom:65, yellowTo: 80,
+        minorTicks: 5
+      };
+
+      var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+      chart.draw(data, options);
+
+      setInterval(function() {
+        data.setValue(0, 1, 40 + Math.round(60 * Math.random()));
+        chart.draw(data, options);
+      }, 13000);
+      setInterval(function() {
+        data.setValue(1, 1, 40 + Math.round(60 * Math.random()));
+        chart.draw(data, options);
+      }, 5000);
+    }
+  </script>
+</head>
+
+<body>
+
+  <!-- example content. remove if you use your own styles and widgets -->
+
+  <header class="app-bar promote-layer">
+    <div class="app-bar-container">
+      <button class="menu"><img src="images/hamburger.svg" alt="Menu"></button>
+      <h1 class="logo">Test</h1>
+      <section class="app-bar-actions">
+      <!-- Put App Bar Buttons Here -->
+      <!-- e.g <button><i class="icon icon-star"></i></button> -->
+      </section>
+    </div>
+  </header>
+
+  <nav class="navdrawer-container promote-layer">
+    <h4>Navigation</h4>
+    <ul>
+      <li><a href="/">Monitor</a></li>
+      <li><a href="/about">Settings</a></li>
+    </ul>
+  </nav>
+
+  <!-- contains different views as divs, which the routing system
+       displays or hides when the URL changes -->
+  <main>
+
+    <div id="angulartest">
+
+      <display></display>
+
+    </div>
+
+    <div id="home">
+
+      <table>
+        <tbody><tr>
+          <td>Temp 1:</td>
+          <td><b>72 C</b></td>
+          <td>Valve 1:</td>
+          <td><b><font color="green">ON</font></b></td>
+          <td>Pump</td>
+          <td><b><font color="gray">OFF</font></b></td>
+        </tr>
+        <tr>
+          <td>Temp 2:</td>
+          <td><b>60 C</b></td>
+          <td>Valve 2:</td>
+          <td><b><font color="gray">OFF</font></b></td>
+          <td>Heat</td>
+          <td><b><font color="red">ON</font></b></td>
+        </tr>
+
+      </tbody></table>
+
+      <h2>(Gauges and charts here)</h2>
+      <div id="chart_div" style="width: 400px; height: 120px;"></div>
+
+
+
+    </div>
+    <div id="about" style="display:none">
+      <table>
+        <tbody><tr>
+          <td>Lower bound temperature 1 (Celcius):</td>
+          <td><input type="text" id="templow" placeholder="Type Temp Low..."></td>
+
+        </tr>
+        <tr>
+          <td>Higher bound temperature 1 (Celcius):</td>
+          <td><input type="text" id="temphigh" placeholder="Type Temp High..."></td>
+        </tr>
+        <tr>
+          <td>Valve 1 duration (seconds):</td>
+          <td><input type="text" id="valve1duration" placeholder="Valve 1 duration..."></td>
+        </tr>
+        <tr>
+          <td>Valve 2 and pump duration (seconds):</td>
+          <td><input type="text" id="valve2duration" placeholder="Valve 2 duration..."></td>
+        </tr>
+      </tbody></table>
+      <p>
+        Heat will start when temperature is going down and reaches:
+        <output id="templowout"></output>
+      </p>
+      <p>
+        Heat will stop when temperature is going up and reaches:
+        <output id="temphighout"></output>
+      </p>
+      <p>
+        Valve 1 will be opened for the following duration:
+        <output id="valve1durationout"></output>
+      </p>
+      <p>
+        Valve 2 will be opened for the following duration
+        <output id="valve2durationout"></output>
+      </p>
+    </div>
+
+
+  </main>
+
+  <script async="" src="main.dart.js"></script>
+  
+
+
+</body></html>
