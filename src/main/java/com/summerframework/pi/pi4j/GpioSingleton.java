@@ -59,7 +59,7 @@ public class GpioSingleton {
 				return true;
 			}
 		} catch (Exception e) {
-			LOGGER.warn("Not running on Raspberry Pi.", e);
+			//LOGGER.warn("Not running on Raspberry Pi.", e);
 		}
 		return false;
 	}
