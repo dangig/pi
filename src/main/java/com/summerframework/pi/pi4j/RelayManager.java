@@ -189,7 +189,61 @@ public class RelayManager {
 			break;
 
 		default:
-			LOGGER.error("Invalid relay board number: " + relayNumber);
+			LOGGER.error("Invalid relay board number: " + relayBoard);
+			break;
+
+		}
+
+	}
+
+	public void turnRelayStateForAllRelays(int relayBoard, boolean onOrOffBoolean) {
+		// LOGGER.debug("Turning On " + relayNumber);
+
+		switch (relayBoard) {
+		case 1:
+			// RELAY BOARD #1
+			r11.set(onOrOffBoolean);
+			r12.set(onOrOffBoolean);
+			r13.set(onOrOffBoolean);
+			r14.set(onOrOffBoolean);
+			if (gpioSingleton.isRunningOnPi()) {
+				// Set all relays
+				try {
+					if (onOrOffBoolean) {
+						ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r all -c on");
+					} else {
+						ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r all -c off");
+					}
+				} catch (IOException | InterruptedException e) {
+					throw new IllegalStateException(e);
+				}
+			}
+
+			break;
+
+		case 2:
+			// RELAY BOARD #2
+			r21.set(onOrOffBoolean);
+			r22.set(onOrOffBoolean);
+			r23.set(onOrOffBoolean);
+			r24.set(onOrOffBoolean);
+			if (gpioSingleton.isRunningOnPi()) {
+				// Set all relays
+				try {
+					if (onOrOffBoolean) {
+						ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial2 + " -v -r all -c on");
+					} else {
+						ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial2 + " -v -r all -c off");
+					}
+				} catch (IOException | InterruptedException e) {
+					throw new IllegalStateException(e);
+				}
+			}
+
+			break;
+
+		default:
+			LOGGER.error("Invalid relay board number: " + relayBoard);
 			break;
 
 		}
