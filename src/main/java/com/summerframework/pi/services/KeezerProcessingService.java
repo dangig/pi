@@ -200,8 +200,8 @@ public class KeezerProcessingService {
 			LOGGER.debug("Keg temperature is therefore between temp2 [{}] and temp3 [{}]. Freezer: No change, Heat: No change.", temp2, temp3);
 		} else {
 			LOGGER.debug("Keg temperature is therefore higher than temp3 [{}]. Freezer: ON, Heat: OFF.", temp3);
-			relayManager.turnRelayState(1, 1, true); // Freezer ON
 			relayManager.turnRelayState(1, 2, false); // Heat OFF
+			relayManager.turnRelayState(1, 1, true); // Freezer ON
 		}
 	}
 }
