@@ -3,6 +3,7 @@ package com.summerframework.pi.pi4j;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class RelayManager {
 	private AtomicBoolean r23 = new AtomicBoolean(false);
 	private AtomicBoolean r24 = new AtomicBoolean(false);
 
-	public void turnRelayState(int relayBoard, int relayNumber, boolean onOrOffBoolean) {
+	public synchronized void turnRelayState(int relayBoard, int relayNumber, boolean onOrOffBoolean) {
 		// LOGGER.debug("Turning On " + relayNumber);
 
 		switch (relayBoard) {
@@ -55,9 +56,11 @@ public class RelayManager {
 					// Set relay 1
 					try {
 						if (onOrOffBoolean) {
-							ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r 1 -c on");
+							String[] response = ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r 1 -c on");
+							checkResponse(response);
 						} else {
-							ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r 1 -c off");
+							String[] response = ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r 1 -c off");
+							checkResponse(response);
 						}
 					} catch (IOException | InterruptedException e) {
 						throw new IllegalStateException(e);
@@ -70,9 +73,11 @@ public class RelayManager {
 					// Set relay 2
 					try {
 						if (onOrOffBoolean) {
-							ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r 2 -c on");
+							String[] response = ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r 2 -c on");
+							checkResponse(response);
 						} else {
-							ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r 2 -c off");
+							String[] response = ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r 2 -c off");
+							checkResponse(response);
 						}
 					} catch (IOException | InterruptedException e) {
 						throw new IllegalStateException(e);
@@ -85,9 +90,11 @@ public class RelayManager {
 					// Set relay 3
 					try {
 						if (onOrOffBoolean) {
-							ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r 3 -c on");
+							String[] response = ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r 3 -c on");
+							checkResponse(response);
 						} else {
-							ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r 3 -c off");
+							String[] response = ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r 3 -c off");
+							checkResponse(response);
 						}
 					} catch (IOException | InterruptedException e) {
 						throw new IllegalStateException(e);
@@ -100,9 +107,11 @@ public class RelayManager {
 					// Set relay 4
 					try {
 						if (onOrOffBoolean) {
-							ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r 4 -c on");
+							String[] response = ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r 4 -c on");
+							checkResponse(response);
 						} else {
-							ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r 4 -c off");
+							String[] response = ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r 4 -c off");
+							checkResponse(response);
 						}
 					} catch (IOException | InterruptedException e) {
 						throw new IllegalStateException(e);
@@ -126,9 +135,11 @@ public class RelayManager {
 					// Set relay 1
 					try {
 						if (onOrOffBoolean) {
-							ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial2 + " -v -r 1 -c on");
+							String[] response = ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial2 + " -v -r 1 -c on");
+							checkResponse(response);
 						} else {
-							ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial2 + " -v -r 1 -c off");
+							String[] response = ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial2 + " -v -r 1 -c off");
+							checkResponse(response);
 						}
 					} catch (IOException | InterruptedException e) {
 						throw new IllegalStateException(e);
@@ -141,9 +152,11 @@ public class RelayManager {
 					// Set relay 2
 					try {
 						if (onOrOffBoolean) {
-							ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial2 + " -v -r 2 -c on");
+							String[] response = ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial2 + " -v -r 2 -c on");
+							checkResponse(response);
 						} else {
-							ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial2 + " -v -r 2 -c off");
+							String[] response = ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial2 + " -v -r 2 -c off");
+							checkResponse(response);
 						}
 					} catch (IOException | InterruptedException e) {
 						throw new IllegalStateException(e);
@@ -156,9 +169,11 @@ public class RelayManager {
 					// Set relay 3
 					try {
 						if (onOrOffBoolean) {
-							ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial2 + " -v -r 3 -c on");
+							String[] response = ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial2 + " -v -r 3 -c on");
+							checkResponse(response);
 						} else {
-							ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial2 + " -v -r 3 -c off");
+							String[] response = ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial2 + " -v -r 3 -c off");
+							checkResponse(response);
 						}
 					} catch (IOException | InterruptedException e) {
 						throw new IllegalStateException(e);
@@ -171,9 +186,11 @@ public class RelayManager {
 					// Set relay 4
 					try {
 						if (onOrOffBoolean) {
-							ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial2 + " -v -r 4 -c on");
+							String[] response = ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial2 + " -v -r 4 -c on");
+							checkResponse(response);
 						} else {
-							ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial2 + " -v -r 4 -c off");
+							String[] response = ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial2 + " -v -r 4 -c off");
+							checkResponse(response);
 						}
 					} catch (IOException | InterruptedException e) {
 						throw new IllegalStateException(e);
@@ -196,7 +213,7 @@ public class RelayManager {
 
 	}
 
-	public void turnRelayStateForAllRelays(int relayBoard, boolean onOrOffBoolean) {
+	public synchronized void turnRelayStateForAllRelays(int relayBoard, boolean onOrOffBoolean) {
 		// LOGGER.debug("Turning On " + relayNumber);
 
 		switch (relayBoard) {
@@ -210,9 +227,11 @@ public class RelayManager {
 				// Set all relays
 				try {
 					if (onOrOffBoolean) {
-						ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r all -c on");
+						String[] response = ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r all -c on");
+						checkResponse(response);
 					} else {
-						ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r all -c off");
+						String[] response = ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r all -c off");
+						checkResponse(response);
 					}
 				} catch (IOException | InterruptedException e) {
 					throw new IllegalStateException(e);
@@ -231,9 +250,11 @@ public class RelayManager {
 				// Set all relays
 				try {
 					if (onOrOffBoolean) {
-						ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial2 + " -v -r all -c on");
+						String[] response = ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial2 + " -v -r all -c on");
+						checkResponse(response);
 					} else {
-						ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial2 + " -v -r all -c off");
+						String[] response = ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial2 + " -v -r all -c off");
+						checkResponse(response);
 					}
 				} catch (IOException | InterruptedException e) {
 					throw new IllegalStateException(e);
@@ -250,6 +271,21 @@ public class RelayManager {
 
 	}
 
+	/**
+	 * Throws IllegalStateException if relay cannot be turned on/off
+	 */
+	private void checkResponse(String[] denkoviResponse) {
+		// Last line of response must start with 'Relay' (e.g. "Relay 3 to ON"  or  "Relay all to OFF", etc.)
+		if (denkoviResponse == null || denkoviResponse.length < 1) {
+			throw new IllegalStateException("Unable to get a response from Denkovi!");
+		}
+		
+		if (!StringUtils.startsWith(denkoviResponse[denkoviResponse.length - 1], "Relay")) {
+			throw new IllegalStateException("Problem getting response from Denkovi: " + denkoviResponse[denkoviResponse.length - 1]);
+		} 
+		
+	}
+	
 	public AtomicBoolean getR11() {
 		return r11;
 	}

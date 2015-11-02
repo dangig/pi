@@ -77,6 +77,9 @@ public class ScheduledTrigger {
 
 	@PostConstruct
 	public void postConstruct() {
+		// (Init) Reset all 4 relays
+		keezerProcessingService.initTurnAllRelaysOff();
+		
 		setSpringContextInitialized(true);
 	}
 
