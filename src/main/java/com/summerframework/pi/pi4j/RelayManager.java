@@ -55,13 +55,16 @@ public class RelayManager {
 				if (gpioSingleton.isRunningOnPi()) {
 					// Set relay 1
 					try {
+						String command;
 						if (onOrOffBoolean) {
-							String[] response = ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r 1 -c on");
-							checkResponse(response);
+							command = "/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r 1 -c on";
 						} else {
-							String[] response = ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r 1 -c off");
-							checkResponse(response);
+							command = "/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r 1 -c off";
 						}
+						LOGGER.debug("About to call this command: " + command);
+						String[] response = ExecUtil.execute(command);
+						LOGGER.debug("Command completed. Result follows.");
+						checkResponse(response);
 					} catch (IOException | InterruptedException e) {
 						throw new IllegalStateException(e);
 					}
@@ -72,13 +75,16 @@ public class RelayManager {
 				if (gpioSingleton.isRunningOnPi()) {
 					// Set relay 2
 					try {
+						String command;
 						if (onOrOffBoolean) {
-							String[] response = ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r 2 -c on");
-							checkResponse(response);
+							command = "/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r 2 -c on";
 						} else {
-							String[] response = ExecUtil.execute("/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r 2 -c off");
-							checkResponse(response);
+							command = "/home/pi/connectors/drcontrol/drcontrol.py -d " + relayBoardSerial1 + " -v -r 2 -c off";
 						}
+						LOGGER.debug("About to call this command: " + command);
+						String[] response = ExecUtil.execute(command);
+						LOGGER.debug("Command completed. Result follows.");
+						checkResponse(response);
 					} catch (IOException | InterruptedException e) {
 						throw new IllegalStateException(e);
 					}
@@ -275,17 +281,28 @@ public class RelayManager {
 	 * Throws IllegalStateException if relay cannot be turned on/off
 	 */
 	private void checkResponse(String[] denkoviResponse) {
-		// Last line of response must start with 'Relay' (e.g. "Relay 3 to ON"  or  "Relay all to OFF", etc.)
+
+		LOGGER.debug("DR response: " + denkoviResponse);
+
+		if (denkoviResponse != null) {
+			for (String responseLine : denkoviResponse) {
+				LOGGER.debug("DR --> " + responseLine);
+			}
+		}
+
+		// Last line of response must start with 'Relay' (e.g. "Relay 3 to ON"
+		// or "Relay all to OFF", etc.)
 		if (denkoviResponse == null || denkoviResponse.length < 1) {
 			throw new IllegalStateException("Unable to get a response from Denkovi!");
 		}
-		
+
+		LOGGER.debug("Does last line start with 'Relay'? : " + StringUtils.startsWith(denkoviResponse[denkoviResponse.length - 1], "Relay"));
 		if (!StringUtils.startsWith(denkoviResponse[denkoviResponse.length - 1], "Relay")) {
 			throw new IllegalStateException("Problem getting response from Denkovi: " + denkoviResponse[denkoviResponse.length - 1]);
-		} 
-		
+		}
+
 	}
-	
+
 	public AtomicBoolean getR11() {
 		return r11;
 	}

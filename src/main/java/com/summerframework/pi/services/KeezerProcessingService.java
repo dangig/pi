@@ -67,15 +67,19 @@ public class KeezerProcessingService {
 
 		BigDecimal tempB1 = keezerConfig1.getThreshold1HeatStartFreezerStopTemperature();
 		BigDecimal tempB2 = keezerConfig1.getThreshold2FreezerStopTemperature();
-		BigDecimal tempB3 = keezerConfig1.getThreshold3FreezerStartHeatStopTemperature();
+		BigDecimal tempB3 = keezerConfig1.getThreshold3HeatStopTemperature();
+		BigDecimal tempB4 = keezerConfig1.getThreshold4FreezerStartHeatStopTemperature();
 
 		BigDecimal tempC1 = keezerConfig2.getThreshold1HeatStartFreezerStopTemperature();
 		BigDecimal tempC2 = keezerConfig2.getThreshold2FreezerStopTemperature();
-		BigDecimal tempC3 = keezerConfig2.getThreshold3FreezerStartHeatStopTemperature();
+		BigDecimal tempC3 = keezerConfig2.getThreshold3HeatStopTemperature();
+		BigDecimal tempC4 = keezerConfig2.getThreshold4FreezerStartHeatStopTemperature();
+		
 
 		BigDecimal tempD1 = keezerConfig3.getThreshold1HeatStartFreezerStopTemperature();
 		BigDecimal tempD2 = keezerConfig3.getThreshold2FreezerStopTemperature();
-		BigDecimal tempD3 = keezerConfig3.getThreshold3FreezerStartHeatStopTemperature();
+		BigDecimal tempD3 = keezerConfig3.getThreshold3HeatStopTemperature();
+		BigDecimal tempD4 = keezerConfig3.getThreshold4FreezerStartHeatStopTemperature();
 
 		// Validate config is ok.
 		if (timestampConfig1 < timestampConfig2 && timestampConfig2 < timestampConfig3 && timestampConfig3 < timestampConfig4) {
@@ -86,7 +90,7 @@ public class KeezerProcessingService {
 			throw new IllegalStateException("Configuration error. Times are not in order ascending.");
 		}
 
-		if (tempB1.compareTo(tempB2) < 0 && tempB2.compareTo(tempB3) < 0) {
+		if (tempB1.compareTo(tempB2) < 0 && tempB2.compareTo(tempB3) < 0 && tempB3.compareTo(tempB4) < 0) {
 			// That's what we want.
 			LOGGER.debug("Config for B temperatures ok.");
 		} else {
@@ -94,7 +98,7 @@ public class KeezerProcessingService {
 			throw new IllegalStateException("Configuration error. Temperatures for config 1 (B) are not in order ascending.");
 		}
 
-		if (tempC1.compareTo(tempC2) < 0 && tempC2.compareTo(tempC3) < 0) {
+		if (tempC1.compareTo(tempC2) < 0 && tempC2.compareTo(tempC3) < 0 && tempC3.compareTo(tempC4) < 0) {
 			// That's what we want.
 			LOGGER.debug("Config for C temperatures ok.");
 		} else {
@@ -102,7 +106,7 @@ public class KeezerProcessingService {
 			throw new IllegalStateException("Configuration error. Temperatures for config 2 (C) are not in order ascending.");
 		}
 
-		if (tempD1.compareTo(tempD2) < 0 && tempD2.compareTo(tempD3) < 0) {
+		if (tempD1.compareTo(tempD2) < 0 && tempD2.compareTo(tempD3) < 0 && tempD3.compareTo(tempD4) < 0) {
 			// That's what we want.
 			LOGGER.debug("Config for D temperatures ok.");
 		} else {
@@ -135,18 +139,21 @@ public class KeezerProcessingService {
 
 		// Take temperature readings.
 		BigDecimal temperature1 = temperatureReader.readThermometer1();
-		sleep(500);
 		BigDecimal temperature2 = temperatureReader.readThermometer2();
-		sleep(500);
-		LOGGER.debug("Current date: [{}] ({}). We are in period: [{}]. Temp 1: [{}], Temp 2: [{}]", nowDate, now, state, temperature1, temperature2);
+		BigDecimal temperature3 = temperatureReader.readThermometer3();
+		BigDecimal temperature4 = temperatureReader.readThermometer4();
+		LOGGER.debug("Current date: [{}] ({}). We are in period: [{}]. Thermometer 1: [{}], Thermometer 2: [{}]", nowDate, now, state, temperature1, temperature2);
 
 		// Save to DB
 		TemperatureLog temperatureLog = new TemperatureLog();
+		temperatureLog.setTimestamp(now);
 		temperatureLog.setFreezer(relayManager.getR11().get());
 		temperatureLog.setHeater(relayManager.getR12().get());
 		temperatureLog.setState(state);
 		temperatureLog.setTemperature1Keg(temperature1);
 		temperatureLog.setTemperature2Freezer(temperature2);
+		temperatureLog.setTemperature3(temperature3);
+		temperatureLog.setTemperature4(temperature4);
 		temperatureLogRepository.save(temperatureLog);
 
 		// Determine what action to take.
@@ -159,15 +166,15 @@ public class KeezerProcessingService {
 			break;
 
 		case "B":
-			takeActionForTemperatureSet(temperature1, tempB1, tempB2, tempB3);
+			takeActionForTemperatureSet(temperature1, tempB1, tempB2, tempB3, tempB4);
 			break;
 
 		case "C":
-			takeActionForTemperatureSet(temperature1, tempC1, tempC2, tempC3);
+			takeActionForTemperatureSet(temperature1, tempC1, tempC2, tempC3, tempC4);
 			break;
 
 		case "D":
-			takeActionForTemperatureSet(temperature1, tempD1, tempD2, tempD3);
+			takeActionForTemperatureSet(temperature1, tempD1, tempD2, tempD3, tempD4);
 			break;
 
 		case "E":
@@ -184,7 +191,7 @@ public class KeezerProcessingService {
 
 	}
 
-	private void takeActionForTemperatureSet(BigDecimal temperatureKeg, BigDecimal temp1, BigDecimal temp2, BigDecimal temp3) {
+	private void takeActionForTemperatureSet(BigDecimal temperatureKeg, BigDecimal temp1, BigDecimal temp2, BigDecimal temp3, BigDecimal temp4) {
 
 		// Logic:
 
@@ -196,37 +203,42 @@ public class KeezerProcessingService {
 
 		// if keg temperature is between temp2 and temp3, do nothing
 
-		// if keg temperature is higher than temp 3, Freezer: ON, Heat: OFF.
+		// if keg temperature is between temp 3 and temp 4, Heat: OFF.
+		
+		// if keg temperature is higher than temp 4:  Freezer: ON, Heat: OFF
 
+		LOGGER.debug("Currently, freezer is [{}] and heater is [{}]", relayManager.getR11().get(), relayManager.getR12().get());
 		LOGGER.debug("Keg temperature is [{}]", temperatureKeg);
 		if (temperatureKeg.compareTo(temp1) < 0) {
 			LOGGER.debug("Keg temperature is therefore below temp1 [{}]. Freezer: OFF, Heat: ON.", temp1);
 			if (relayManager.getR11().get() == true) { 
 				relayManager.turnRelayState(1, 1, false); // If freezer is on ==> Set Freezer OFF
-				sleep(1000);
 			}
 			if (relayManager.getR12().get() == false) {
+				sleep(2000);
 				relayManager.turnRelayState(1, 2, true); // If heat is off ==> Set Heat ON
-				sleep(1000);
 			}
 			
 		} else if (temperatureKeg.compareTo(temp2) < 0) {
 			LOGGER.debug("Keg temperature is therefore between temp1 [{}] and temp2 [{}]. Freezer: OFF, Heat: No change.", temp1, temp2);
 			if (relayManager.getR11().get() == true) {
 				relayManager.turnRelayState(1, 1, false); // If freezer is on ==> Freezer OFF
-				sleep(1000);
 			}
 		} else if (temperatureKeg.compareTo(temp3) < 0) {
 			LOGGER.debug("Keg temperature is therefore between temp2 [{}] and temp3 [{}]. Freezer: No change, Heat: No change.", temp2, temp3);
+		} else if (temperatureKeg.compareTo(temp4) < 0) {
+			LOGGER.debug("Keg temperature is therefore between temp3 [{}] and temp4 [{}]. Freezer: No change, Heat: OFF", temp3, temp4);
+			if (relayManager.getR12().get() == true) {
+				relayManager.turnRelayState(1,  2, false);
+			}
 		} else {
-			LOGGER.debug("Keg temperature is therefore higher than temp3 [{}]. Freezer: ON, Heat: OFF.", temp3);
+			LOGGER.debug("Keg temperature is therefore higher than temp4 [{}]. Freezer: ON, Heat: OFF.", temp4);
 			if (relayManager.getR12().get() == true) {
 				relayManager.turnRelayState(1, 2, false); // If heat is on ==> Heat OFF
-				sleep(1000);
 			}
 			if (relayManager.getR11().get() == false) {
+				sleep(2000);
 				relayManager.turnRelayState(1, 1, true); // If freezer is off ==> Freezer ON
-				sleep(1000);
 			}
 			
 		}
@@ -234,7 +246,7 @@ public class KeezerProcessingService {
 	
 	private void sleep(long timeInMillis) {
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(timeInMillis);
 		} catch (InterruptedException e) {
 			LOGGER.error("InterruptedException", e);
 		}

@@ -28,11 +28,10 @@ public class KeezerConfig {
 	@Id
 	private long id;
 	private long stateChangeDatetime;
-	private BigDecimal threshold1HeatStartFreezerStopTemperature; // e.g. 15 //
-																	// degrees
+	private BigDecimal threshold1HeatStartFreezerStopTemperature; // e.g. 15 degrees
 	private BigDecimal threshold2FreezerStopTemperature; // e.g. 16 degrees
-	private BigDecimal threshold3FreezerStartHeatStopTemperature; // e.g. 17
-																	// degrees
+	private BigDecimal threshold3HeatStopTemperature; //e.g. 17 degrees
+	private BigDecimal threshold4FreezerStartHeatStopTemperature; // e.g. 18 degrees
 
 	public long getId() {
 		return id;
@@ -66,12 +65,20 @@ public class KeezerConfig {
 		this.threshold2FreezerStopTemperature = threshold2FreezerStopTemperature;
 	}
 
-	public BigDecimal getThreshold3FreezerStartHeatStopTemperature() {
-		return threshold3FreezerStartHeatStopTemperature;
+	public BigDecimal getThreshold3HeatStopTemperature() {
+		return threshold3HeatStopTemperature;
 	}
 
-	public void setThreshold3FreezerStartHeatStopTemperature(BigDecimal threshold3FreezerStartHeatStopTemperature) {
-		this.threshold3FreezerStartHeatStopTemperature = threshold3FreezerStartHeatStopTemperature;
+	public void setThreshold3HeatStopTemperature(BigDecimal threshold3HeatStopTemperature) {
+		this.threshold3HeatStopTemperature = threshold3HeatStopTemperature;
+	}
+
+	public BigDecimal getThreshold4FreezerStartHeatStopTemperature() {
+		return threshold4FreezerStartHeatStopTemperature;
+	}
+
+	public void setThreshold4FreezerStartHeatStopTemperature(BigDecimal threshold4FreezerStartHeatStopTemperature) {
+		this.threshold4FreezerStartHeatStopTemperature = threshold4FreezerStartHeatStopTemperature;
 	}
 
 }
