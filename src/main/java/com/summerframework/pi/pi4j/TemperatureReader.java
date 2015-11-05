@@ -50,12 +50,9 @@ public class TemperatureReader {
 			if (ArrayUtils.isEmpty(response) || response.length != 2 || !"YES".equals(StringUtils.substring(response[0], response[0].length() - 3))) {
 				throw new IllegalStateException("Could not read temperature 1, CRC not ok.");
 			}
-			// Get last 5 digits
-			String temperatureNoDot = StringUtils.substring(response[1], response[1].length() - 5);
-			LOGGER.debug("Read temperature 1: " + temperatureNoDot);
-			String temperatureInt = StringUtils.substring(temperatureNoDot, 0, 2);
-			String temperatureDecimal = StringUtils.substring(temperatureNoDot, 2);
-			return new BigDecimal(temperatureInt + "." + temperatureDecimal);
+
+			return extractTemperature("1", response[1]);
+
 		} catch (IOException | InterruptedException e) {
 			throw new IllegalStateException("Could not read temperature 1", e);
 		}
@@ -79,12 +76,9 @@ public class TemperatureReader {
 			if (ArrayUtils.isEmpty(response) || response.length != 2 || !"YES".equals(StringUtils.substring(response[0], response[0].length() - 3))) {
 				throw new IllegalStateException("Could not read temperature 2, CRC not ok.");
 			}
-			// Get last 5 digits
-			String temperatureNoDot = StringUtils.substring(response[1], response[1].length() - 5);
-			LOGGER.debug("Read temperature 2: " + temperatureNoDot);
-			String temperatureInt = StringUtils.substring(temperatureNoDot, 0, 2);
-			String temperatureDecimal = StringUtils.substring(temperatureNoDot, 2);
-			return new BigDecimal(temperatureInt + "." + temperatureDecimal);
+
+			return extractTemperature("2", response[1]);
+
 		} catch (IOException | InterruptedException e) {
 			throw new IllegalStateException("Could not read temperature 2", e);
 		}
@@ -107,12 +101,9 @@ public class TemperatureReader {
 			if (ArrayUtils.isEmpty(response) || response.length != 2 || !"YES".equals(StringUtils.substring(response[0], response[0].length() - 3))) {
 				throw new IllegalStateException("Could not read temperature 3, CRC not ok.");
 			}
-			// Get last 5 digits
-			String temperatureNoDot = StringUtils.substring(response[1], response[1].length() - 5);
-			LOGGER.debug("Read temperature 3: " + temperatureNoDot);
-			String temperatureInt = StringUtils.substring(temperatureNoDot, 0, 2);
-			String temperatureDecimal = StringUtils.substring(temperatureNoDot, 2);
-			return new BigDecimal(temperatureInt + "." + temperatureDecimal);
+
+			return extractTemperature("3", response[1]);
+
 		} catch (IOException | InterruptedException e) {
 			throw new IllegalStateException("Could not read temperature 3", e);
 		}
@@ -135,15 +126,71 @@ public class TemperatureReader {
 			if (ArrayUtils.isEmpty(response) || response.length != 2 || !"YES".equals(StringUtils.substring(response[0], response[0].length() - 3))) {
 				throw new IllegalStateException("Could not read temperature 3, CRC not ok.");
 			}
-			// Get last 5 digits
-			String temperatureNoDot = StringUtils.substring(response[1], response[1].length() - 5);
-			LOGGER.debug("Read temperature 4: " + temperatureNoDot);
-			String temperatureInt = StringUtils.substring(temperatureNoDot, 0, 2);
-			String temperatureDecimal = StringUtils.substring(temperatureNoDot, 2);
-			return new BigDecimal(temperatureInt + "." + temperatureDecimal);
+
+			return extractTemperature("4", response[1]);
+
 		} catch (IOException | InterruptedException e) {
 			throw new IllegalStateException("Could not read temperature 4", e);
 		}
 	}
 
+	public BigDecimal extractTemperature(String tempId, String endingOfRawReading) {
+		// Get last 10 digits, will eventually include "t=125750 or t=0".
+		String temperatureStringRaw = StringUtils.substring(endingOfRawReading, endingOfRawReading.length() - 10);
+		LOGGER.debug("Read temperature " + tempId + ": " + temperatureStringRaw);
+		// Can be: 20625, 9875 for below 10! Assuming -1525 for -1, -10525
+		// for -10
+
+		// Can be: t=1, =25 ==> Take everything after "=". Can be: -10 take
+		// everything
+		String negSignIfAny;
+		String temperatureInt;
+		String temperatureDecimal;
+		if (StringUtils.contains(temperatureStringRaw, "=")) {
+
+			// Get everything after "="
+			String temperatureAfterEqual = StringUtils.substring(temperatureStringRaw, temperatureStringRaw.indexOf("=") + 1);
+
+			// boolean to check if that string starts with "-", if so take
+			// everything after.
+			String temperatureAfterEqualWithoutNegSign;
+			if (StringUtils.startsWith(temperatureAfterEqual, "-")) {
+				negSignIfAny = "-";
+				temperatureAfterEqualWithoutNegSign = temperatureAfterEqual.substring(1); // remove
+																							// negative
+																							// sign
+			} else {
+				negSignIfAny = "";
+				temperatureAfterEqualWithoutNegSign = temperatureAfterEqual; // the
+																				// string
+																				// is
+																				// already
+																				// positive
+			}
+
+			// If that result has three digits or less, they are ALL digits
+			// part, having integer part being 0.
+			if (temperatureAfterEqualWithoutNegSign.length() <= 3) {
+				// DECIMAL
+				temperatureDecimal = StringUtils.leftPad(temperatureAfterEqualWithoutNegSign, 3, "0");
+				// INT being 0
+				temperatureInt = "0";
+			} else {
+				// DECIMAL
+				// Get last 3 digits
+				temperatureDecimal = StringUtils.substring(temperatureAfterEqualWithoutNegSign, temperatureAfterEqualWithoutNegSign.length() - 3);
+
+				// INT
+				String temperatureIntRaw = StringUtils.removeEnd(temperatureAfterEqualWithoutNegSign, temperatureDecimal);
+				temperatureInt = StringUtils.substring(temperatureIntRaw, temperatureIntRaw.indexOf("=") + 1);
+
+			}
+
+		} else {
+			throw new IllegalStateException("Could not find t= in the string. Please validate if thermometer is plugged in.");
+		}
+		// Put: Integer part being: negative sign + digit (or zero) +
+		// "." + decimal part.
+		return new BigDecimal(negSignIfAny + temperatureInt + "." + temperatureDecimal);
+	}
 }
