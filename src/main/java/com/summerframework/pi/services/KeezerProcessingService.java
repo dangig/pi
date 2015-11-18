@@ -92,6 +92,7 @@ public class KeezerProcessingService {
 		BigDecimal tempD4 = keezerConfig3.getThreshold4FreezerStartHeatStopTemperature();
 
 		// Validate config is ok.
+		// NOTE: This logic is duplicated in WebController's update Keezer config method...
 		if (timestampConfig1 < timestampConfig2 && timestampConfig2 < timestampConfig3 && timestampConfig3 < timestampConfig4) {
 			// That's what we want
 			LOGGER.debug("Config for timestamps ok.");

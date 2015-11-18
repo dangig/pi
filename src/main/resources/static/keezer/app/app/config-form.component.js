@@ -12,7 +12,7 @@ var ConfigFormComponent = (function () {
     function ConfigFormComponent() {
         // TODO: 1. Go get actual values from database.
         // TODO: 2. Load model = new Config(..) with these values.
-        this.model = new config_1.Config('2015-11-11 08:00:00', 18, 19, 20, 21, 'test', 22, 23, 24, 25, 'test2', 0, 1, 2, 3, 'test3');
+        this.model = new config_1.Config('2015-11-11T11:00', 18, 19, 20, 21, '2015-11-20T20:00', 22, 23, 24, 25, '2015-11-21T21:00', 0, 1, 2, 3, '2015-11-22T22:00');
         this.submitted = false;
     }
     ConfigFormComponent.prototype.onSubmit = function () {

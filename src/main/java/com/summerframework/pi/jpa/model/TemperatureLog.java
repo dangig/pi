@@ -36,6 +36,18 @@ public class TemperatureLog {
 	@Size(max = 4)
 	private String state;
 
+	@Column(precision = 8, scale = 4)
+	private BigDecimal configTemperature1;
+
+	@Column(precision = 8, scale = 4)
+	private BigDecimal configTemperature2;
+
+	@Column(precision = 8, scale = 4)
+	private BigDecimal configTemperature3;
+
+	@Column(precision = 8, scale = 4)
+	private BigDecimal configTemperature4;
+
 	private boolean freezer;
 
 	private boolean heater;
@@ -94,6 +106,38 @@ public class TemperatureLog {
 
 	public void setState(String state) {
 		this.state = state;
+	}
+
+	public BigDecimal getConfigTemperature1() {
+		return configTemperature1;
+	}
+
+	public void setConfigTemperature1(BigDecimal configTemperature1) {
+		this.configTemperature1 = configTemperature1;
+	}
+
+	public BigDecimal getConfigTemperature2() {
+		return configTemperature2;
+	}
+
+	public void setConfigTemperature2(BigDecimal configTemperature2) {
+		this.configTemperature2 = configTemperature2;
+	}
+
+	public BigDecimal getConfigTemperature3() {
+		return configTemperature3;
+	}
+
+	public void setConfigTemperature3(BigDecimal configTemperature3) {
+		this.configTemperature3 = configTemperature3;
+	}
+
+	public BigDecimal getConfigTemperature4() {
+		return configTemperature4;
+	}
+
+	public void setConfigTemperature4(BigDecimal configTemperature4) {
+		this.configTemperature4 = configTemperature4;
 	}
 
 	public boolean isFreezer() {

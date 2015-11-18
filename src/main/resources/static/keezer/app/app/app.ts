@@ -7,7 +7,7 @@ import {ConfigFormComponent} from "./config-form.component";
 
 @Component({
   selector: 'my-app',
-  template: '<h1>Config Form</h1><config-form></config-form>',
+  template: '<config-form></config-form>',
   directives: [ConfigFormComponent]
 })
 

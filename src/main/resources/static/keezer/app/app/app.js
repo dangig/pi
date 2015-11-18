@@ -17,7 +17,7 @@ var AppComponent = (function () {
     AppComponent = __decorate([
         angular2_1.Component({
             selector: 'my-app',
-            template: '<h1>Config Form</h1><config-form></config-form>',
+            template: '<config-form></config-form>',
             directives: [config_form_component_1.ConfigFormComponent]
         })
     ], AppComponent);
