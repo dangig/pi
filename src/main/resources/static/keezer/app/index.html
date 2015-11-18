@@ -45,8 +45,74 @@
     <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.indigo-pink.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="styles/main.css">
+
+    <!-- Angular2 quick start addition for form-->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Angular2 -->
+    <script src="../node_modules/systemjs/dist/system.src.js"></script>
+    <script src="../node_modules/angular2/bundles/angular2.dev.js"></script>
+    <script>
+      System.config({
+        packages: {'app': {defaultExtension: 'js'}}
+      });
+      System.import('app/app');
+    </script>
+
+
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+
+    <!-- WebSockets -->
+    <script src="./scripts/sockjs-0.3.4.js"></script>
+    <script src="./scripts/stomp.js"></script>
+    <script type="text/javascript">
+      var stompClient = null;
+
+      function setConnected(connected) {
+        document.getElementById('connect').disabled = connected;
+        document.getElementById('disconnect').disabled = !connected;
+        document.getElementById('conversationDiv').style.visibility = connected ? 'visible' : 'hidden';
+        document.getElementById('response').innerHTML = '';
+      }
+
+      function connect() {
+        var socket = new SockJS('/livechart');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function(frame) {
+          setConnected(true);
+          console.log('Connected: ' + frame);
+          stompClient.subscribe('/topic/livechartevent', function(greeting){
+            showGreeting(JSON.parse(greeting.body).content);
+          });
+        });
+      }
+
+      function disconnect() {
+        if (stompClient != null) {
+          stompClient.disconnect();
+        }
+        setConnected(false);
+        console.log("Disconnected");
+      }
+
+      function sendName() {
+        var name = document.getElementById('name').value;
+        stompClient.send("/app/livechart", {}, JSON.stringify({ 'name': name }));
+      }
+
+      function showGreeting(message) {
+        var response = document.getElementById('response');
+        var p = document.createElement('p');
+        p.style.wordWrap = 'break-word';
+        p.appendChild(document.createTextNode(message));
+        response.appendChild(p);
+      }
+    </script>
+
   </head>
-  <body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
+  <body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base" onload="connect()">
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
       <header class="mdl-layout__header mdl-layout__header--scroll mdl-color--primary">
         <div class="mdl-layout--large-screen-only mdl-layout__header-row">
@@ -78,6 +144,22 @@
                 <h4>Monitoring - Last Hour</h4>
 
                 Chart here
+
+
+
+
+              </div>
+
+              <div>
+                <div>
+                  <button id="connect" onclick="connect();">Connect</button>
+                  <button id="disconnect" disabled="disabled" onclick="disconnect();">Disconnect</button>
+                </div>
+                <div id="conversationDiv">
+                  <label>Click to connect to live chart</label><input type="text" id="name" />
+                  <button id="sendName" onclick="sendName();">Send</button>
+                  <p id="response"></p>
+                </div>
               </div>
 
             </div>
@@ -120,6 +202,8 @@
                 <h4>Config</h4>
 
                 Form here.
+
+                <my-app>loading...</my-app>
               </div>
             </div>
           </section>

@@ -6,6 +6,7 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
 import com.summerframework.pi.jpa.model.KeezerConfig;
@@ -14,6 +15,7 @@ import com.summerframework.pi.jpa.model.TemperatureLog;
 import com.summerframework.pi.jpa.model.TemperatureLogRepository;
 import com.summerframework.pi.pi4j.RelayManager;
 import com.summerframework.pi.pi4j.TemperatureReader;
+import com.summerframework.pi.websockets.ChartResponse;
 
 /**
  * Freezer on Relay #1
@@ -44,6 +46,9 @@ public class KeezerProcessingService {
 
 	@Autowired
 	private RelayManager relayManager;
+	
+	@Autowired
+	private SimpMessageSendingOperations messagingTemplate;
 
 	public void initTurnAllRelaysOff() {
 		LOGGER.debug("Turning all relays off. (Assumption on the start of program).");
@@ -53,6 +58,11 @@ public class KeezerProcessingService {
 	
 	public void processKeezerAction(String executionId) {
 		LOGGER.debug("In KeezerProcessingService.");
+		
+		// TODO: Remove that, move below.
+		ChartResponse chartData = new ChartResponse();
+		chartData.setContent("Temperature 1: ...");
+		messagingTemplate.convertAndSend("/topic/livechartevent", chartData);
 
 		// Retrieve config
 		KeezerConfig keezerConfig1 = keezerConfigRepository.findOne(1l);
@@ -156,6 +166,11 @@ public class KeezerProcessingService {
 		temperatureLog.setTemperature4(temperature4);
 		temperatureLogRepository.save(temperatureLog);
 
+		// Broadcast the news
+		//ChartResponse chartData = new ChartResponse();
+		//chartData.setContent("Temperature 1: ...");
+		//messagingTemplate.convertAndSend("/topic/livechartevent", chartData);
+		
 		// Determine what action to take.
 
 		switch (state) {
