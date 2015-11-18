@@ -3,7 +3,7 @@
     <h1>Config Form</h1>
     <form (ng-submit)="onSubmit()" #hf="form">
 
-      <table>
+      <table [hidden]="resultsLoaded">
         <tr>
           <td>
             <div class="form-group">
