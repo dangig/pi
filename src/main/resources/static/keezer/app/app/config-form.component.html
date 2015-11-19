@@ -3,209 +3,214 @@
     <h1>Config Form</h1>
     <form (ng-submit)="onSubmit()" #hf="form">
 
-      <table [hidden]="resultsLoaded">
-        <tr>
-          <td>
+      <div [hidden]="!resultsLoaded">
+        <table>
+          <tr>
+            <td>
+              <div class="form-group">
+                <label for="dateb">Date B</label>
+                <input type="datetime-local"  class="form-control" required style="width:232px"
+                       [(ng-model)]="model.dateb"
+                       ng-control="dateb"  #dateb="form" >
+                <div [hidden]="dateb.valid" class="alert alert-danger">
+                  Date B is required
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <label for="tb1">tb1</label>
+                <input type="number"  step="0.01" class="form-control" style="width:78px"
+                       [(ng-model)]="model.tb1"
+                       ng-control="tb1"  #tb1="form" >
+                <div [hidden]="tb1.valid" class="alert alert-danger">
+                  tb1 is required
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <label for="tb2">tb2</label>
+                <input type="number"  step="0.01" class="form-control" style="width:78px"
+                       [(ng-model)]="model.tb2"
+                       ng-control="tb2"  #tb2="form" >
+                <div [hidden]="tb2.valid" class="alert alert-danger">
+                  tb2 is required
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <label for="tb3">tb3</label>
+                <input type="number"  step="0.01" class="form-control" style="width:78px"
+                       [(ng-model)]="model.tb3"
+                       ng-control="tb3"  #tb3="form" >
+                <div [hidden]="tb3.valid" class="alert alert-danger">
+                  tb3 is required
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <label for="tb4">tb4</label>
+                <input type="number"  step="0.01" class="form-control" style="width:78px"
+                       [(ng-model)]="model.tb4"
+                       ng-control="tb4"  #tb4="form" >
+                <div [hidden]="tb4.valid" class="alert alert-danger">
+                  tb4 is required
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
             <div class="form-group">
-              <label for="dateb">Date B</label>
+              <label for="datec">Date C</label>
               <input type="datetime-local"  class="form-control" required style="width:232px"
-                     [(ng-model)]="model.dateb"
-                     ng-control="dateb"  #dateb="form" >
-              <div [hidden]="dateb.valid" class="alert alert-danger">
-                Date B is required
+                     [(ng-model)]="model.datec"
+                     ng-control="datec"  #datec="form" >
+              <div [hidden]="datec.valid" class="alert alert-danger">
+                Date C is required
               </div>
             </div>
           </td>
           <td>
             <div class="form-group">
-              <label for="tb1">tb1</label>
+              <label for="tc1">tc1</label>
               <input type="number"  step="0.01" class="form-control" style="width:78px"
-                     [(ng-model)]="model.tb1"
-                     ng-control="tb1"  #tb1="form" >
-              <div [hidden]="tb1.valid" class="alert alert-danger">
-                tb1 is required
+                     [(ng-model)]="model.tc1"
+                     ng-control="tc1"  #tc1="form" >
+              <div [hidden]="tc1.valid" class="alert alert-danger">
+                tc1 is required
               </div>
             </div>
           </td>
           <td>
             <div class="form-group">
-              <label for="tb2">tb2</label>
+              <label for="tc2">tc2</label>
               <input type="number"  step="0.01" class="form-control" style="width:78px"
-                     [(ng-model)]="model.tb2"
-                     ng-control="tb2"  #tb2="form" >
-              <div [hidden]="tb2.valid" class="alert alert-danger">
-                tb2 is required
+                     [(ng-model)]="model.tc2"
+                     ng-control="tc2"  #tc2="form" >
+              <div [hidden]="tc2.valid" class="alert alert-danger">
+                tc2 is required
               </div>
             </div>
           </td>
           <td>
             <div class="form-group">
-              <label for="tb3">tb3</label>
+              <label for="tc3">tc3</label>
               <input type="number"  step="0.01" class="form-control" style="width:78px"
-                     [(ng-model)]="model.tb3"
-                     ng-control="tb3"  #tb3="form" >
-              <div [hidden]="tb3.valid" class="alert alert-danger">
-                tb3 is required
+                     [(ng-model)]="model.tc3"
+                     ng-control="tc3"  #tc3="form" >
+              <div [hidden]="tc3.valid" class="alert alert-danger">
+                tc3 is required
               </div>
             </div>
           </td>
           <td>
             <div class="form-group">
-              <label for="tb4">tb4</label>
+              <label for="tc4">tc4</label>
               <input type="number"  step="0.01" class="form-control" style="width:78px"
-                     [(ng-model)]="model.tb4"
-                     ng-control="tb4"  #tb4="form" >
-              <div [hidden]="tb4.valid" class="alert alert-danger">
-                tb4 is required
+                     [(ng-model)]="model.tc4"
+                     ng-control="tc4"  #tc4="form" >
+              <div [hidden]="tc4.valid" class="alert alert-danger">
+                tc4 is required
               </div>
             </div>
           </td>
-        </tr>
-        <tr>
-          <td>
-          <div class="form-group">
-            <label for="datec">Date C</label>
-            <input type="datetime-local"  class="form-control" required style="width:232px"
-                   [(ng-model)]="model.datec"
-                   ng-control="datec"  #datec="form" >
-            <div [hidden]="datec.valid" class="alert alert-danger">
-              Date C is required
-            </div>
-          </div>
-        </td>
-        <td>
-          <div class="form-group">
-            <label for="tc1">tc1</label>
-            <input type="number"  step="0.01" class="form-control" style="width:78px"
-                   [(ng-model)]="model.tc1"
-                   ng-control="tc1"  #tc1="form" >
-            <div [hidden]="tc1.valid" class="alert alert-danger">
-              tc1 is required
-            </div>
-          </div>
-        </td>
-        <td>
-          <div class="form-group">
-            <label for="tc2">tc2</label>
-            <input type="number"  step="0.01" class="form-control" style="width:78px"
-                   [(ng-model)]="model.tc2"
-                   ng-control="tc2"  #tc2="form" >
-            <div [hidden]="tc2.valid" class="alert alert-danger">
-              tc2 is required
-            </div>
-          </div>
-        </td>
-        <td>
-          <div class="form-group">
-            <label for="tc3">tc3</label>
-            <input type="number"  step="0.01" class="form-control" style="width:78px"
-                   [(ng-model)]="model.tc3"
-                   ng-control="tc3"  #tc3="form" >
-            <div [hidden]="tc3.valid" class="alert alert-danger">
-              tc3 is required
-            </div>
-          </div>
-        </td>
-        <td>
-          <div class="form-group">
-            <label for="tc4">tc4</label>
-            <input type="number"  step="0.01" class="form-control" style="width:78px"
-                   [(ng-model)]="model.tc4"
-                   ng-control="tc4"  #tc4="form" >
-            <div [hidden]="tc4.valid" class="alert alert-danger">
-              tc4 is required
-            </div>
-          </div>
-        </td>
-        </tr>
-        <tr>
-          <td>
-          <div class="form-group">
-            <label for="dated">Date D</label>
-            <input type="datetime-local"  class="form-control" required style="width:232px"
-                   [(ng-model)]="model.dated"
-                   ng-control="dated"  #dated="form" >
-            <div [hidden]="dated.valid" class="alert alert-danger">
-              Date D is required
-            </div>
-          </div>
-        </td>
-        <td>
-          <div class="form-group">
-            <label for="td1">td1</label>
-            <input type="number"  step="0.01" class="form-control" style="width:78px"
-                   [(ng-model)]="model.td1"
-                   ng-control="td1"  #td1="form" >
-            <div [hidden]="td1.valid" class="alert alert-danger">
-              td1 is required
-            </div>
-          </div>
-        </td>
-        <td>
-          <div class="form-group">
-            <label for="td2">td2</label>
-            <input type="number"  step="0.01" class="form-control" style="width:78px"
-                   [(ng-model)]="model.td2"
-                   ng-control="td2"  #td2="form" >
-            <div [hidden]="td2.valid" class="alert alert-danger">
-              td2 is required
-            </div>
-          </div>
-        </td>
-        <td>
-          <div class="form-group">
-            <label for="td3">td3</label>
-            <input type="number"  step="0.01" class="form-control" style="width:78px"
-                   [(ng-model)]="model.td3"
-                   ng-control="td3"  #td3="form" >
-            <div [hidden]="td3.valid" class="alert alert-danger">
-              td3 is required
-            </div>
-          </div>
-        </td>
-        <td>
-          <div class="form-group">
-            <label for="td4">td4</label>
-            <input type="number"  step="0.01" class="form-control" style="width:78px"
-                   [(ng-model)]="model.td4"
-                   ng-control="td4"  #td4="form" >
-            <div [hidden]="td4.valid" class="alert alert-danger">
-              td4 is required
-            </div>
-          </div>
-        </td>
-        </tr>
-        <tr>
-          <td>
+          </tr>
+          <tr>
+            <td>
             <div class="form-group">
-              <label for="datee">Date E</label>
+              <label for="dated">Date D</label>
               <input type="datetime-local"  class="form-control" required style="width:232px"
-                     [(ng-model)]="model.datee"
-                     ng-control="datee"  #datee="form" >
-              <div [hidden]="datee.valid" class="alert alert-danger">
+                     [(ng-model)]="model.dated"
+                     ng-control="dated"  #dated="form" >
+              <div [hidden]="dated.valid" class="alert alert-danger">
                 Date D is required
               </div>
             </div>
           </td>
           <td>
-
+            <div class="form-group">
+              <label for="td1">td1</label>
+              <input type="number"  step="0.01" class="form-control" style="width:78px"
+                     [(ng-model)]="model.td1"
+                     ng-control="td1"  #td1="form" >
+              <div [hidden]="td1.valid" class="alert alert-danger">
+                td1 is required
+              </div>
+            </div>
           </td>
           <td>
-
+            <div class="form-group">
+              <label for="td2">td2</label>
+              <input type="number"  step="0.01" class="form-control" style="width:78px"
+                     [(ng-model)]="model.td2"
+                     ng-control="td2"  #td2="form" >
+              <div [hidden]="td2.valid" class="alert alert-danger">
+                td2 is required
+              </div>
+            </div>
           </td>
           <td>
-
+            <div class="form-group">
+              <label for="td3">td3</label>
+              <input type="number"  step="0.01" class="form-control" style="width:78px"
+                     [(ng-model)]="model.td3"
+                     ng-control="td3"  #td3="form" >
+              <div [hidden]="td3.valid" class="alert alert-danger">
+                td3 is required
+              </div>
+            </div>
           </td>
           <td>
-
+            <div class="form-group">
+              <label for="td4">td4</label>
+              <input type="number"  step="0.01" class="form-control" style="width:78px"
+                     [(ng-model)]="model.td4"
+                     ng-control="td4"  #td4="form" >
+              <div [hidden]="td4.valid" class="alert alert-danger">
+                td4 is required
+              </div>
+            </div>
           </td>
-        </tr>
+          </tr>
+          <tr>
+            <td>
+              <div class="form-group">
+                <label for="datee">Date E</label>
+                <input type="datetime-local"  class="form-control" required style="width:232px"
+                       [(ng-model)]="model.datee"
+                       ng-control="datee"  #datee="form" >
+                <div [hidden]="datee.valid" class="alert alert-danger">
+                  Date D is required
+                </div>
+              </div>
+            </td>
+            <td>
 
-      </table>
+            </td>
+            <td>
+
+            </td>
+            <td>
+
+            </td>
+            <td>
+
+            </td>
+          </tr>
+
+        </table>
 
 
       <button type="submit" class="btn btn-default"
               [disabled]="!hf.form.valid">Submit!</button>
+      </div>
+      <div [hidden]="resultsLoaded">
+        Loading...
+      </div>
     </form>
   </div>
   <div [hidden]="!submitted">
