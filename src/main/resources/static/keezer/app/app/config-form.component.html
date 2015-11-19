@@ -280,6 +280,14 @@
       <div class="col-xs-9 pull-left">{{ model.datee }}</div>
     </div>
     <br>
+    <h2>Results:</h2>
+    <div [hidden]="!updateCompletedSuccessfully">
+      <h4 style="color:green">Config updated successfully!</h4>
+    </div>
+    <div [hidden]="!updateCompletedWithErrors">
+      <h3 style="color:red">Error when updating config:</h3>
+      <p style="color:red">{{ updateErrors }}</p>
+    </div>
     <button class="btn btn-default" (click)="submitted=false">Edit</button>
   </div>
 </div>

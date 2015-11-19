@@ -37,11 +37,20 @@ export class ConfigFormComponent {
   // 2. Feed some temporary model so that it does not complain
   model = new Config('2015-11-11T11:01', 1, 2, 3, 4, '2015-11-11T11:02', 5, 6, 7, 8, '2015-11-11T11:03', 9, 10, 11, 12, '2015-11-11T11:04');
   submitted = false;
+  updateCompletedSuccessfully = false;
+  updateCompletedWithErrors = false;
+  updateErrors = null;
+
 
   onSubmit() {
 
     // 4: Submit this to server, and display errors if any.
     console.log("In onSubmit() method!");
+
+    // 5: Reset fields following from a previous submit
+    this.updateCompletedSuccessfully = false;
+    this.updateCompletedWithErrors = false;
+    this.updateErrors = null;
 
     let self = this;
     this.submitted = true;
@@ -55,8 +64,11 @@ export class ConfigFormComponent {
         console.log("****** Update results: " + JSON.stringify(data));
         if (data.success == true) {
           console.log("Successfully updated result");
+          self.updateCompletedSuccessfully = true;
         } else {
           console.log("There are errors : " + data.errors);
+          self.updateCompletedWithErrors = true;
+          self.updateErrors = data.errors;
         }
 
       },
