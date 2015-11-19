@@ -72,7 +72,11 @@ export class ConfigFormComponent {
         }
 
       },
-      err => console.log("**** Update results, error. : " + err),
+      err => {
+        console.log("**** Update results, error. : " + err);
+        self.updateCompletedWithErrors = true;
+        self.updateErrors = err + " (server might be down?)";
+      },
       () => console.log("*** Update results... ")
 
     );

@@ -49,6 +49,9 @@ public class KeezerProcessingService {
 	
 	@Autowired
 	private SimpMessageSendingOperations messagingTemplate;
+	
+	@Autowired
+	private TemperatureChartHelper temperatureChartHelper;
 
 	public void initTurnAllRelaysOff() {
 		LOGGER.debug("Turning all relays off. (Assumption on the start of program).");
@@ -59,11 +62,6 @@ public class KeezerProcessingService {
 	public void processKeezerAction(String executionId) {
 		LOGGER.debug("In KeezerProcessingService.");
 		
-		// TODO: Remove that, move below.
-		ChartResponse chartData = new ChartResponse();
-		chartData.setContent("Temperature 1: ...");
-		messagingTemplate.convertAndSend("/topic/livechartevent", chartData);
-
 		// Retrieve config
 		KeezerConfig keezerConfig1 = keezerConfigRepository.findOne(1l);
 		KeezerConfig keezerConfig2 = keezerConfigRepository.findOne(2l);
@@ -149,13 +147,15 @@ public class KeezerProcessingService {
 		}
 
 		// Take temperature readings.
-		BigDecimal temperature1 = temperatureReader.readThermometer1();
-		BigDecimal temperature2 = temperatureReader.readThermometer2();
+		// TODO: PUT BACK THIS ONE: BigDecimal temperature1 = temperatureReader.readThermometer1();
+		BigDecimal temperature1 = new BigDecimal(77.777);
+		//BigDecimal temperature2 = temperatureReader.readThermometer2();
+		BigDecimal temperature2 = new BigDecimal(78.888);
 		BigDecimal temperature3 = temperatureReader.readThermometer3();
 		BigDecimal temperature4 = temperatureReader.readThermometer4();
 		LOGGER.debug("Current date: [{}] ({}). We are in period: [{}]. Thermometer 1: [{}], Thermometer 2: [{}]", nowDate, now, state, temperature1, temperature2);
 
-		// Save to DB
+		// Prepare temperature log to save to DB later
 		TemperatureLog temperatureLog = new TemperatureLog();
 		temperatureLog.setTimestamp(now);
 		temperatureLog.setFreezer(relayManager.getR11().get());
@@ -165,13 +165,7 @@ public class KeezerProcessingService {
 		temperatureLog.setTemperature2Freezer(temperature2);
 		temperatureLog.setTemperature3(temperature3);
 		temperatureLog.setTemperature4(temperature4);
-		temperatureLogRepository.save(temperatureLog);
 
-		// Broadcast the news
-		//ChartResponse chartData = new ChartResponse();
-		//chartData.setContent("Temperature 1: ...");
-		//messagingTemplate.convertAndSend("/topic/livechartevent", chartData);
-		
 		// Determine what action to take.
 
 		switch (state) {
@@ -182,15 +176,15 @@ public class KeezerProcessingService {
 			break;
 
 		case "B":
-			takeActionForTemperatureSet(temperature1, tempB1, tempB2, tempB3, tempB4);
+			takeActionForTemperatureSet(temperatureLog, temperature1, tempB1, tempB2, tempB3, tempB4);
 			break;
 
 		case "C":
-			takeActionForTemperatureSet(temperature1, tempC1, tempC2, tempC3, tempC4);
+			takeActionForTemperatureSet(temperatureLog, temperature1, tempC1, tempC2, tempC3, tempC4);
 			break;
 
 		case "D":
-			takeActionForTemperatureSet(temperature1, tempD1, tempD2, tempD3, tempD4);
+			takeActionForTemperatureSet(temperatureLog, temperature1, tempD1, tempD2, tempD3, tempD4);
 			break;
 
 		case "E":
@@ -204,10 +198,27 @@ public class KeezerProcessingService {
 			errorHandler.handleError("Invalid state : " + state);
 			break;
 		}
-
+		
+		// The logic above (takeActionForTemperatureSet) stored the config temperatures. It is now time to save temperatureLog to database.
+		temperatureLogRepository.save(temperatureLog);
+		
+		// Broadcast the news!
+		ChartResponse chartData = new ChartResponse();
+		chartData.setContent("Sending temperatures for last hour");
+		chartData.setTemperatureLogs(temperatureChartHelper.getLastHourData(now));
+		messagingTemplate.convertAndSend("/topic/livechartevent", chartData);
 	}
 
-	private void takeActionForTemperatureSet(BigDecimal temperatureKeg, BigDecimal temp1, BigDecimal temp2, BigDecimal temp3, BigDecimal temp4) {
+	/**
+	 * 
+	 * @param temperatureLog : Used only to store temp1, 2, 3 and 4 into it, for chart purpose.
+	 * @param temperatureKeg
+	 * @param temp1
+	 * @param temp2
+	 * @param temp3
+	 * @param temp4
+	 */
+	private void takeActionForTemperatureSet(TemperatureLog temperatureLog, BigDecimal temperatureKeg, BigDecimal temp1, BigDecimal temp2, BigDecimal temp3, BigDecimal temp4) {
 
 		// Logic:
 
@@ -223,6 +234,12 @@ public class KeezerProcessingService {
 		
 		// if keg temperature is higher than temp 4:  Freezer: ON, Heat: OFF
 
+		// But first, store our configured temperature for chart purpose
+		temperatureLog.setConfigTemperature1(temp1);
+		temperatureLog.setConfigTemperature2(temp2);
+		temperatureLog.setConfigTemperature3(temp3);
+		temperatureLog.setConfigTemperature4(temp4);
+		
 		LOGGER.debug("Currently, freezer is [{}] and heater is [{}]", relayManager.getR11().get(), relayManager.getR12().get());
 		LOGGER.debug("Keg temperature is [{}]", temperatureKeg);
 		if (temperatureKeg.compareTo(temp1) < 0) {

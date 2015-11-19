@@ -54,7 +54,11 @@ var ConfigFormComponent = (function () {
                 self.updateCompletedWithErrors = true;
                 self.updateErrors = data.errors;
             }
-        }, function (err) { return console.log("**** Update results, error. : " + err); }, function () { return console.log("*** Update results... "); });
+        }, function (err) {
+            console.log("**** Update results, error. : " + err);
+            self.updateCompletedWithErrors = true;
+            self.updateErrors = err + " (server might be down?)";
+        }, function () { return console.log("*** Update results... "); });
     };
     ConfigFormComponent = __decorate([
         angular2_1.Component({

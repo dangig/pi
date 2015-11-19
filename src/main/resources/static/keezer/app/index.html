@@ -61,7 +61,6 @@
     </script>
 
 
-
     <!-- Bootstrap -->
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
 
@@ -72,9 +71,10 @@
       var stompClient = null;
 
       function setConnected(connected) {
-        document.getElementById('connect').disabled = connected;
-        document.getElementById('disconnect').disabled = !connected;
-        document.getElementById('conversationDiv').style.visibility = connected ? 'visible' : 'hidden';
+        // commented because disabled... we connect automatically.
+        //document.getElementById('connect').disabled = connected;
+        //document.getElementById('disconnect').disabled = !connected;
+        //document.getElementById('conversationDiv').style.visibility = connected ? 'visible' : 'hidden';
         document.getElementById('response').innerHTML = '';
       }
 
@@ -85,7 +85,10 @@
           setConnected(true);
           console.log('Connected: ' + frame);
           stompClient.subscribe('/topic/livechartevent', function(greeting){
-            showGreeting(JSON.parse(greeting.body).content);
+            // Uncomment for debugging purposes, but everything is in the console anyway.
+            var greetingBody = JSON.parse(greeting.body);
+            showGreeting(greetingBody.content);
+            updateLastHourChart(greetingBody.temperatureLogs);
           });
         });
       }
@@ -110,6 +113,106 @@
         p.appendChild(document.createTextNode(message));
         response.appendChild(p);
       }
+
+      <!-- Update Last Hour Chart -->
+      function updateLastHourChart(temperatureLogs) {
+        google.load('visualization', '1', {'packages':['annotationchart']});
+        drawChart();
+        function drawChart() {
+          var data = new google.visualization.DataTable();
+          data.addColumn('datetime', 'Date');
+          data.addColumn('number', 'T keg');
+          data.addColumn('number', 'T freezer');
+          data.addColumn('number', 'T other');
+          data.addColumn('number', 'T other');
+          data.addColumn('number', 'C1 heater on');
+          data.addColumn('number', 'C2 freezer off');
+          data.addColumn('number', 'C3 heater off');
+          data.addColumn('number', 'C4 freezer on');
+          data.addColumn('number', 'Freezer (off=30, on=40)');
+          data.addColumn('number', 'Heater (off=50, on=60)');
+          for (var i = 0; i < temperatureLogs.length; i++) {
+            data.addRows([
+              [new Date(temperatureLogs[i].timestamp),
+                temperatureLogs[i].temperature1Keg,
+                temperatureLogs[i].temperature2Freezer,
+                temperatureLogs[i].temperature3,
+                temperatureLogs[i].temperature4,
+                temperatureLogs[i].configTemperature1,
+                temperatureLogs[i].configTemperature2,
+                temperatureLogs[i].configTemperature3,
+                temperatureLogs[i].configTemperature4,
+                // null checks in case we are in a null temperature log used to break the line.
+                (temperatureLogs[i].temperature1Keg != null ? (temperatureLogs[i].freezer ? 40 : 30) : null),
+                (temperatureLogs[i].temperature1Keg != null ? (temperatureLogs[i].heater ? 60 : 50) : null)
+              ]]);
+          }
+
+          var chartLastHour = new google.visualization.AnnotationChart(document.getElementById('chart_last_hour_div'));
+
+          var options = {
+            displayAnnotations: false,
+            thickness: 2,
+            colors: ["#3366CC", "#109618", "#FF9900", "#990099", "#CCCCCC", "#CCCCCC", "#CCCCCC", "#CCCCCC", "#66AA00", "#DC3912"]
+          };
+
+          chartLastHour.draw(data, options);
+
+
+        }
+
+
+      }
+
+
+      <!-- Request All Data from server -->
+      function requestAllData() {
+        alert("TODO: Request all data here");
+      }
+
+    </script>
+
+    <!-- Google Annotation Chart (saved in a file for offline access) -->
+    <!--<script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['annotationchart']}]}"></script>-->
+    <script src="./scripts/googleannotationchart.js"></script>
+
+    <script type='text/javascript'>
+//      google.load('visualization', '1', {'packages':['annotationchart']});
+//      google.setOnLoadCallback(drawChart);
+//      function drawChart() {
+//        var data = new google.visualization.DataTable();
+//        data.addColumn('date', 'Date');
+//        data.addColumn('number', 'Kepler-22b mission');
+//        data.addColumn('string', 'Kepler title');
+//        data.addColumn('string', 'Kepler text');
+//        data.addColumn('number', 'Gliese 163 mission');
+//        data.addColumn('string', 'Gliese title');
+//        data.addColumn('string', 'Gliese text');
+//        data.addRows([
+//          [new Date(2314, 2, 15), 12400, undefined, undefined,
+//            10645, undefined, undefined],
+//          [new Date(2314, 2, 16), 24045, 'Lalibertines', 'First encounter',
+//            12374, undefined, undefined],
+//          [new Date(2314, 2, 17), 35022, 'Lalibertines', 'They are very tall',
+//            15766, 'Gallantors', 'First Encounter'],
+//          [new Date(2314, 2, 18), 12284, 'Lalibertines', 'Attack on our crew!',
+//            34334, 'Gallantors', 'Statement of shared principles'],
+//          [new Date(2314, 2, 19), 8476, 'Lalibertines', 'Heavy casualties',
+//            66467, 'Gallantors', 'Mysteries revealed'],
+//          [new Date(2314, 2, 20), 0, 'Lalibertines', 'All crew lost',
+//            79463, 'Gallantors', 'Omniscience achieved']
+//        ]);
+//
+//        var chart = new google.visualization.AnnotationChart(document.getElementById('chart_all_data_div'));
+//        var chart2 = new google.visualization.AnnotationChart(document.getElementById('chart_last_hour_div'));
+//
+//        var options = {
+//          displayAnnotations: true
+//        };
+//
+//        chart.draw(data, options);
+//        chart2.draw(data, options);
+//      }
     </script>
 
   </head>
@@ -138,62 +241,71 @@
       </header>
       <main class="mdl-layout__content">
         <div class="mdl-layout__tab-panel is-active" id="monitoring">
-          <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+          <!--<section class="section&#45;&#45;center mdl-grid mdl-grid&#45;&#45;no-spacing mdl-shadow&#45;&#45;2dp">-->
 
-            <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-              <div class="mdl-card__supporting-text">
-                <h4>Monitoring - Last Hour</h4>
+            <!--<div class="mdl-card mdl-cell mdl-cell&#45;&#45;9-col-desktop mdl-cell&#45;&#45;6-col-tablet mdl-cell&#45;&#45;4-col-phone">-->
+              <!--<div class="mdl-card__supporting-text">-->
+                <!---->
 
-                Chart here
-
-
+              <!--</div>-->
 
 
-              </div>
+              <!--<div>-->
+                <!--<div>-->
+                  <!--<button id="connect" onclick="connect();">Connect</button>-->
+                  <!--<button id="disconnect" disabled="disabled" onclick="disconnect();">Disconnect</button>-->
+                <!--</div>-->
+                <!--<div id="conversationDiv">-->
+                  <!--<label>Click to connect to live chart</label><input type="text" id="name" />-->
+                  <!--<button id="sendName" onclick="sendName();">Send</button>-->
+                  <!--<p id="response"></p>-->
+                <!--</div>-->
+              <!--</div>-->
 
-              <div>
-                <div>
-                  <button id="connect" onclick="connect();">Connect</button>
-                  <button id="disconnect" disabled="disabled" onclick="disconnect();">Disconnect</button>
-                </div>
-                <div id="conversationDiv">
-                  <label>Click to connect to live chart</label><input type="text" id="name" />
-                  <button id="sendName" onclick="sendName();">Send</button>
-                  <p id="response"></p>
-                </div>
-              </div>
+            <!--</div>-->
+            <!--<button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button&#45;&#45;icon" id="btn1">-->
+              <!--<i class="material-icons">more_vert</i>-->
+            <!--</button>-->
+            <!--<ul class="mdl-menu mdl-js-menu mdl-menu&#45;&#45;bottom-right" for="btn1">-->
+              <!--<li class="mdl-menu__item">...</li>-->
+              <!--<li class="mdl-menu__item" disabled>...</li>-->
+              <!--<li class="mdl-menu__item">...</li>-->
+            <!--</ul>-->
+          <!--</section>-->
+          <h4 align="center">Monitoring - Last Hour</h4>
+          <div id='chart_last_hour_div' style='width: 1200px; height: 620px;'>Waiting for data...</div>
 
-            </div>
-            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="btn1">
-              <i class="material-icons">more_vert</i>
-            </button>
-            <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="btn1">
-              <li class="mdl-menu__item">...</li>
-              <li class="mdl-menu__item" disabled>...</li>
-              <li class="mdl-menu__item">...</li>
-            </ul>
-          </section>
+          <div id="conversationDiv" hidden>
+            <label>Click to connect to live chart</label><input type="text" id="name" />
+            <button id="sendName" onclick="sendName();">Send</button>
+            <p id="response" hidden></p>
+          </div>
+
         </div>
         <div class="mdl-layout__tab-panel" id="monitoring2">
-          <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+          <!--<section class="section&#45;&#45;center mdl-grid mdl-grid&#45;&#45;no-spacing mdl-shadow&#45;&#45;2dp">-->
 
-            <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-              <div class="mdl-card__supporting-text">
-                <h4>Monitoring - All Data</h4>
+            <!--<div class="mdl-card mdl-cell mdl-cell&#45;&#45;9-col-desktop mdl-cell&#45;&#45;6-col-tablet mdl-cell&#45;&#45;4-col-phone">-->
+              <!--<div class="mdl-card__supporting-text">-->
+                <!---->
 
-                Chart here
-              </div>
+              <!--</div>-->
 
-            </div>
-            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="btn1">
-              <i class="material-icons">more_vert</i>
-            </button>
-            <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="btn1">
-              <li class="mdl-menu__item">...</li>
-              <li class="mdl-menu__item" disabled>...</li>
-              <li class="mdl-menu__item">...</li>
-            </ul>
-          </section>
+            <!--</div>-->
+
+            <!--<button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button&#45;&#45;icon" id="btn1">-->
+              <!--<i class="material-icons">more_vert</i>-->
+            <!--</button>-->
+            <!--<ul class="mdl-menu mdl-js-menu mdl-menu&#45;&#45;bottom-right" for="btn1">-->
+              <!--<li class="mdl-menu__item">...</li>-->
+              <!--<li class="mdl-menu__item" disabled>...</li>-->
+              <!--<li class="mdl-menu__item">...</li>-->
+            <!--</ul>-->
+          <!--</section>-->
+          <h4 align="center">Monitoring - All Data</h4>
+          <button id="requestAllData" onclick="requestAllData();">Click here to request historical data</button>
+          <div id='chart_all_data_div' style='width: 1200px; height: 620px;'></div>
+
         </div>
         <div class="mdl-layout__tab-panel" id="config">
           <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">

@@ -4,4 +4,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface TemperatureLogRepository extends CrudRepository<TemperatureLog, Long> {
 
+	Iterable<TemperatureLog> findByTimestampGreaterThanEqual(long timestampOneHourAgo);
 }
