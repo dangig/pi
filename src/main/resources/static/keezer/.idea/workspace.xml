@@ -27,8 +27,8 @@
             <state vertical-scroll-proportion="0.0">
               <caret line="21" column="3" selection-start-line="21" selection-start-column="3" selection-end-line="21" selection-end-column="3" />
               <folding>
-                <marker date="1447954398000" expanded="true" signature="1023:1033" placeholder="{&quot;selector&quot;: 'my-app'...}" />
-                <marker date="1447954398000" expanded="true" signature="1023:1083" placeholder="{...}" />
+                <marker date="1447964619000" expanded="true" signature="1023:1033" placeholder="{&quot;selector&quot;: 'my-app'...}" />
+                <marker date="1447964619000" expanded="true" signature="1023:1083" placeholder="{...}" />
               </folding>
             </state>
           </provider>
@@ -37,8 +37,8 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.38551402">
-              <caret line="280" column="35" selection-start-line="280" selection-start-column="35" selection-end-line="280" selection-end-column="35" />
+            <state vertical-scroll-proportion="0.03504673">
+              <caret line="182" column="39" selection-start-line="182" selection-start-column="39" selection-end-line="182" selection-end-column="39" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#div#0;n#main#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#div#1;n#main#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -50,7 +50,7 @@
       <file leaf-file-name="config-form.component.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/app/config-form.component.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.551282">
+            <state vertical-scroll-proportion="-51.346153">
               <caret line="267" column="60" selection-start-line="267" selection-start-column="60" selection-end-line="267" selection-end-column="60" />
               <folding>
                 <element signature="n#style#0;n#input#0;n#div#0;n#td#0;n#tr#0;n#table#0;n#div#0;n#form#0;n#div#0;n#div#0;n#!!top" expanded="true" />
@@ -455,8 +455,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="21" column="48" selection-start-line="21" selection-start-column="48" selection-end-line="21" selection-end-column="48" />
           <folding>
-            <marker date="1447954398000" expanded="true" signature="1023:1033" placeholder="{&quot;selector&quot;: 'my-app'...}" />
-            <marker date="1447954398000" expanded="true" signature="1023:1083" placeholder="{...}" />
+            <marker date="1447964619000" expanded="true" signature="1023:1033" placeholder="{&quot;selector&quot;: 'my-app'...}" />
+            <marker date="1447964619000" expanded="true" signature="1023:1083" placeholder="{...}" />
           </folding>
         </state>
       </provider>
@@ -528,8 +528,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="21" column="3" selection-start-line="21" selection-start-column="3" selection-end-line="21" selection-end-column="3" />
           <folding>
-            <marker date="1447954398000" expanded="true" signature="1023:1033" placeholder="{&quot;selector&quot;: 'my-app'...}" />
-            <marker date="1447954398000" expanded="true" signature="1023:1083" placeholder="{...}" />
+            <marker date="1447964619000" expanded="true" signature="1023:1033" placeholder="{&quot;selector&quot;: 'my-app'...}" />
+            <marker date="1447964619000" expanded="true" signature="1023:1083" placeholder="{...}" />
           </folding>
         </state>
       </provider>
@@ -558,9 +558,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/app/config-form.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="77" column="60" selection-start-line="77" selection-start-column="60" selection-end-line="77" selection-end-column="60" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/app/config-form.component.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.551282">
+        <state vertical-scroll-proportion="-51.346153">
           <caret line="267" column="60" selection-start-line="267" selection-start-column="60" selection-end-line="267" selection-end-column="60" />
           <folding>
             <element signature="n#style#0;n#input#0;n#div#0;n#td#0;n#tr#0;n#table#0;n#div#0;n#form#0;n#div#0;n#div#0;n#!!top" expanded="true" />
@@ -586,14 +594,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/app/config-form.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="77" column="60" selection-start-line="77" selection-start-column="60" selection-end-line="77" selection-end-column="60" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/app/app.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -606,8 +606,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.38551402">
-          <caret line="280" column="35" selection-start-line="280" selection-start-column="35" selection-end-line="280" selection-end-column="35" />
+        <state vertical-scroll-proportion="0.03504673">
+          <caret line="182" column="39" selection-start-line="182" selection-start-column="39" selection-end-line="182" selection-end-column="39" />
           <folding>
             <element signature="n#style#0;n#div#0;n#div#0;n#main#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#1;n#main#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />

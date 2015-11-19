@@ -64,6 +64,9 @@
     <!-- Bootstrap -->
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
 
+    <!-- jQuery -->
+    <script src="./scripts/jquery.min.js"></script>
+
     <!-- WebSockets -->
     <script src="./scripts/sockjs-0.3.4.js"></script>
     <script src="./scripts/stomp.js"></script>
@@ -167,7 +170,60 @@
 
       <!-- Request All Data from server -->
       function requestAllData() {
-        alert("TODO: Request all data here");
+        document.getElementById('getAllDataButton').disabled = true;
+        document.getElementById('getAllDataButton').innerText = "Please wait... Can take 2 minutes.";
+
+        $.get("/getalldata", function(temperatureLogs, status) {
+
+          document.getElementById('getAllDataButton').disabled = false;
+          document.getElementById('getAllDataButton').innerText = "Click here to request historical data";
+
+          google.load('visualization', '1', {'packages':['annotationchart']});
+          drawAllDataChart();
+          function drawAllDataChart() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('datetime', 'Date');
+            data.addColumn('number', 'T keg');
+            data.addColumn('number', 'T freezer');
+            data.addColumn('number', 'T other');
+            data.addColumn('number', 'T other');
+            data.addColumn('number', 'C1 heater on');
+            data.addColumn('number', 'C2 freezer off');
+            data.addColumn('number', 'C3 heater off');
+            data.addColumn('number', 'C4 freezer on');
+            data.addColumn('number', 'Freezer (off=30, on=40)');
+            data.addColumn('number', 'Heater (off=50, on=60)');
+            for (var i = 0; i < temperatureLogs.length; i++) {
+              data.addRows([
+                [new Date(temperatureLogs[i].timestamp),
+                  temperatureLogs[i].temperature1Keg,
+                  temperatureLogs[i].temperature2Freezer,
+                  temperatureLogs[i].temperature3,
+                  temperatureLogs[i].temperature4,
+                  temperatureLogs[i].configTemperature1,
+                  temperatureLogs[i].configTemperature2,
+                  temperatureLogs[i].configTemperature3,
+                  temperatureLogs[i].configTemperature4,
+                  // null checks in case we are in a null temperature log used to break the line.
+                  (temperatureLogs[i].temperature1Keg != null ? (temperatureLogs[i].freezer ? 40 : 30) : null),
+                  (temperatureLogs[i].temperature1Keg != null ? (temperatureLogs[i].heater ? 60 : 50) : null)
+                ]]);
+            }
+
+            var chartAllData = new google.visualization.AnnotationChart(document.getElementById('chart_all_data_div'));
+
+            var options = {
+              displayAnnotations: false,
+              thickness: 2,
+              colors: ["#3366CC", "#109618", "#FF9900", "#990099", "#CCCCCC", "#CCCCCC", "#CCCCCC", "#CCCCCC", "#66AA00", "#DC3912"]
+            };
+
+            chartAllData.draw(data, options);
+
+          }
+
+          });
+
       }
 
     </script>
@@ -303,7 +359,7 @@
             <!--</ul>-->
           <!--</section>-->
           <h4 align="center">Monitoring - All Data</h4>
-          <button id="requestAllData" onclick="requestAllData();">Click here to request historical data</button>
+          <button id="getAllDataButton" onclick="requestAllData();">Click here to request historical data</button>
           <div id='chart_all_data_div' style='width: 1200px; height: 620px;'></div>
 
         </div>
