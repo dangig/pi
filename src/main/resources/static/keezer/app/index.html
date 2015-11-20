@@ -137,14 +137,14 @@
           for (var i = 0; i < temperatureLogs.length; i++) {
             data.addRows([
               [new Date(temperatureLogs[i].timestamp),
-                temperatureLogs[i].temperature1Keg,
-                temperatureLogs[i].temperature2Freezer,
-                temperatureLogs[i].temperature3,
-                temperatureLogs[i].temperature4,
                 temperatureLogs[i].configTemperature1,
                 temperatureLogs[i].configTemperature2,
                 temperatureLogs[i].configTemperature3,
                 temperatureLogs[i].configTemperature4,
+                temperatureLogs[i].temperature1Keg,
+                temperatureLogs[i].temperature2Freezer,
+                temperatureLogs[i].temperature3,
+                temperatureLogs[i].temperature4,
                 // null checks in case we are in a null temperature log used to break the line.
                 (temperatureLogs[i].temperature1Keg != null ? (temperatureLogs[i].freezer ? 33 : 30) : null),
                 (temperatureLogs[i].temperature1Keg != null ? (temperatureLogs[i].heater ? 38 : 35) : null)
@@ -196,14 +196,14 @@
             for (var i = 0; i < temperatureLogs.length; i++) {
               data.addRows([
                 [new Date(temperatureLogs[i].timestamp),
-                  temperatureLogs[i].temperature1Keg,
-                  temperatureLogs[i].temperature2Freezer,
-                  temperatureLogs[i].temperature3,
-                  temperatureLogs[i].temperature4,
                   temperatureLogs[i].configTemperature1,
                   temperatureLogs[i].configTemperature2,
                   temperatureLogs[i].configTemperature3,
                   temperatureLogs[i].configTemperature4,
+                  temperatureLogs[i].temperature1Keg,
+                  temperatureLogs[i].temperature2Freezer,
+                  temperatureLogs[i].temperature3,
+                  temperatureLogs[i].temperature4,
                   // null checks in case we are in a null temperature log used to break the line.
                   (temperatureLogs[i].temperature1Keg != null ? (temperatureLogs[i].freezer ? 33 : 30) : null),
                   (temperatureLogs[i].temperature1Keg != null ? (temperatureLogs[i].heater ? 38 : 35) : null)
