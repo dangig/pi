@@ -1,6 +1,7 @@
 package com.summerframework.pi.pi4j;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.PostConstruct;
 
@@ -30,8 +31,10 @@ public class GpioSingleton {
 	private String piSerialNumber;
 
 	private GpioController gpio;
-	
+
 	private GpioPinDigitalOutput ipLed;
+
+	private AtomicInteger hallPulseCounter = new AtomicInteger(0);
 
 	@PostConstruct
 	public void setUp() {
@@ -42,7 +45,11 @@ public class GpioSingleton {
 
 				// Register the listener here to have the button telling us IP
 				// address.
-				registerIpButtonAndIpLed();
+				// registerIpButtonAndIpLed();
+
+				// Instead, register the listener so that this button increments
+				// a counter (for Hall effect sensors)
+				registerCounterButtonAndIpLed();
 			}
 		}
 	}
@@ -59,7 +66,7 @@ public class GpioSingleton {
 				return true;
 			}
 		} catch (Exception e) {
-			//LOGGER.warn("Not running on Raspberry Pi.", e);
+			// LOGGER.warn("Not running on Raspberry Pi.", e);
 		}
 		return false;
 	}
@@ -102,6 +109,9 @@ public class GpioSingleton {
 
 	}
 
+	/**
+	 * @deprecated
+	 */
 	private void registerIpButtonAndIpLed() {
 		// Registering the listener on the button to give IP address
 		// last digit (blinking, IP last digit = 100 + NUMBER OF BLINKS)
@@ -114,7 +124,7 @@ public class GpioSingleton {
 		// provision gpio pin #27 (board pin #16) as an output pin and
 		// turn on
 		ipLed = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_27, "MyLED", PinState.HIGH);
-		
+
 		// set shutdown state for this pin
 		ipLed.setShutdownOptions(true, PinState.LOW);
 
@@ -171,7 +181,7 @@ public class GpioSingleton {
 					// Make the LED blink. If -1, light for 10 seconds.
 					// If 0, light once for 3 seconds. If not, blink for
 					// that amount of times.
-					
+
 					ipLed.low();
 					threadSleep(2000);
 					if (ipAddressMinus100 < 0) {
@@ -187,7 +197,8 @@ public class GpioSingleton {
 						for (int i = 0; i < ipAddressMinus100; i++) {
 							LOGGER.debug("IP. Pulse #" + (i + 1));
 							ipLed.pulse(250, true);
-							threadSleep(250);						}
+							threadSleep(250);
+						}
 					}
 
 				}
@@ -196,10 +207,54 @@ public class GpioSingleton {
 		});
 	}
 
+	private void registerCounterButtonAndIpLed() {
+		// Registering the listener on the button to increment hallPulseCounter.
+		// Call this only once.
+
+		// provision gpio pin #02 (board pin #27) as an input pin with
+		// its internal pull down resistor enabled.
+		final GpioPinDigitalInput pushButton = gpio.provisionDigitalInputPin(RaspiPin.GPIO_02, PinPullResistance.PULL_DOWN);
+
+		// provision gpio pin #27 (board pin #16) as an output pin and
+		// turn on
+		ipLed = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_27, "MyLED", PinState.LOW);
+
+		// set shutdown state for this pin
+		ipLed.setShutdownOptions(true, PinState.LOW);
+
+		// create and register gpio pin listener
+		pushButton.addListener(new GpioPinListenerDigital() {
+
+			@Override
+			public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
+
+				// synchronize block in case button is pushed twice ... Will
+				// eventually execute.
+				synchronized (pushButton) {
+
+					// Make the LED blink during 20 ms. If -1, light for 10
+					// seconds.
+					// If 0, light once for 3 seconds. If not, blink for
+					// that amount of times.
+
+					if (PinState.HIGH.equals(event.getState())) {
+						// event : going high. turn on led and increase counter.
+						ipLed.high();
+						int newValue = hallPulseCounter.incrementAndGet();
+						LOGGER.debug("***** Number of pulse so far: " + newValue);
+					} else {
+						// event : going low. turn off led
+						ipLed.low();
+					}
+				}
+			}
+		});
+	}
+
 	public GpioPinDigitalOutput getIpLed() {
 		return ipLed;
 	}
-	
+
 	private void threadSleep(long millis) {
 		try {
 			Thread.sleep(millis);
