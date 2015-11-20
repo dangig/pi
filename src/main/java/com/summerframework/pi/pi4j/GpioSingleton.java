@@ -49,7 +49,11 @@ public class GpioSingleton {
 
 				// Instead, register the listener so that this button increments
 				// a counter (for Hall effect sensors)
-				registerCounterButtonAndIpLed();
+
+				// Use both below, because the first one registers the Led which
+				// is used for the second as well.
+				registerCounterButtonAndCounterLed();
+				registerHallEffectSensorAndCounterLed();
 			}
 		}
 	}
@@ -207,16 +211,17 @@ public class GpioSingleton {
 		});
 	}
 
-	private void registerCounterButtonAndIpLed() {
+	private void registerCounterButtonAndCounterLed() {
 		// Registering the listener on the button to increment hallPulseCounter.
 		// Call this only once.
 
 		// provision gpio pin #02 (board pin #27) as an input pin with
-		// its internal pull down resistor enabled.
+		// its internal pull *down* resistor enabled. (when button is pressed,
+		// pin is provided 5V, so floating state is pulled down to 0V)
 		final GpioPinDigitalInput pushButton = gpio.provisionDigitalInputPin(RaspiPin.GPIO_02, PinPullResistance.PULL_DOWN);
 
 		// provision gpio pin #27 (board pin #16) as an output pin and
-		// turn on
+		// turn off
 		ipLed = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_27, "MyLED", PinState.LOW);
 
 		// set shutdown state for this pin
@@ -232,11 +237,7 @@ public class GpioSingleton {
 				// eventually execute.
 				synchronized (pushButton) {
 
-					// Make the LED blink during 20 ms. If -1, light for 10
-					// seconds.
-					// If 0, light once for 3 seconds. If not, blink for
-					// that amount of times.
-
+					// Make the LED blink, following button.
 					if (PinState.HIGH.equals(event.getState())) {
 						// event : going high. turn on led and increase counter.
 						ipLed.high();
@@ -244,6 +245,55 @@ public class GpioSingleton {
 						LOGGER.debug("***** Number of pulse so far: " + newValue);
 					} else {
 						// event : going low. turn off led
+						ipLed.low();
+					}
+				}
+			}
+		});
+	}
+
+	private void registerHallEffectSensorAndCounterLed() {
+		// Registering the listener on the hall effect sensor to increment
+		// hallPulseCounter.
+		// Call this only once.
+
+		// provision gpio pin #03 (board pin #22) as an input pin with
+		// its internal pull *up* resistor enabled. (when hall effect sensor is
+		// activated, pin is shorted down to 0V, so floating state is pulled up
+		// to its internal 3.3v).
+		final GpioPinDigitalInput hallEffectSensorDataPin = gpio.provisionDigitalInputPin(RaspiPin.GPIO_03, PinPullResistance.PULL_UP);
+
+		// pin #27 (board pin #16) should already be configured as an output pin
+		// and turn off. Commented out here.
+		// ipLed = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_27, "MyLED",
+		// PinState.LOW);
+		// // set shutdown state for this pin
+		// ipLed.setShutdownOptions(true, PinState.LOW);
+
+		// create and register gpio pin listener
+		hallEffectSensorDataPin.addListener(new GpioPinListenerDigital() {
+
+			@Override
+			public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
+
+				// synchronize block in case button is pushed twice ... Will
+				// eventually execute.
+				// (would normally syncrhonize on shared object, but button in
+				// the circuit here is just for testing, so left like that).
+				synchronized (hallEffectSensorDataPin) {
+
+					// Make the LED blink, following Hall sensor effect. Look at
+					// pin state which is inverted from button's action, because
+					// the hall sensor is actioned => 0V, and the button =>
+					// 3.3V.
+					if (PinState.LOW.equals(event.getState())) {
+						// event : hall sensor activated. turn on led and
+						// increase counter.
+						ipLed.high();
+						int newValue = hallPulseCounter.incrementAndGet();
+						LOGGER.debug("***** Number of pulse so far: " + newValue);
+					} else {
+						// event : hall sensor off. turn off led
 						ipLed.low();
 					}
 				}
