@@ -124,16 +124,16 @@
         function drawChart() {
           var data = new google.visualization.DataTable();
           data.addColumn('datetime', 'Date');
+          data.addColumn('number', 'C1');
+          data.addColumn('number', 'C2');
+          data.addColumn('number', 'C3');
+          data.addColumn('number', 'C4');
           data.addColumn('number', 'T keg');
           data.addColumn('number', 'T freezer');
-          data.addColumn('number', 'T other');
-          data.addColumn('number', 'T other');
-          data.addColumn('number', 'C1 heater on');
-          data.addColumn('number', 'C2 freezer off');
-          data.addColumn('number', 'C3 heater off');
-          data.addColumn('number', 'C4 freezer on');
-          data.addColumn('number', 'Freezer (off=30, on=40)');
-          data.addColumn('number', 'Heater (off=50, on=60)');
+          data.addColumn('number', 'T3');
+          data.addColumn('number', 'T4');
+          data.addColumn('number', 'Freezer (off=30, on=33)');
+          data.addColumn('number', 'Heater (off=35, on=38)');
           for (var i = 0; i < temperatureLogs.length; i++) {
             data.addRows([
               [new Date(temperatureLogs[i].timestamp),
@@ -146,8 +146,8 @@
                 temperatureLogs[i].configTemperature3,
                 temperatureLogs[i].configTemperature4,
                 // null checks in case we are in a null temperature log used to break the line.
-                (temperatureLogs[i].temperature1Keg != null ? (temperatureLogs[i].freezer ? 40 : 30) : null),
-                (temperatureLogs[i].temperature1Keg != null ? (temperatureLogs[i].heater ? 60 : 50) : null)
+                (temperatureLogs[i].temperature1Keg != null ? (temperatureLogs[i].freezer ? 33 : 30) : null),
+                (temperatureLogs[i].temperature1Keg != null ? (temperatureLogs[i].heater ? 38 : 35) : null)
               ]]);
           }
 
@@ -156,7 +156,7 @@
           var options = {
             displayAnnotations: false,
             thickness: 2,
-            colors: ["#3366CC", "#109618", "#FF9900", "#990099", "#CCCCCC", "#CCCCCC", "#CCCCCC", "#CCCCCC", "#66AA00", "#DC3912"]
+            colors: ["#CCCCCC", "#CCCCCC", "#CCCCCC", "#CCCCCC", "#3366CC", "#109618", "#FF9900", "#990099", "#66AA00", "#DC3912"]
           };
 
           chartLastHour.draw(data, options);
@@ -183,16 +183,16 @@
           function drawAllDataChart() {
             var data = new google.visualization.DataTable();
             data.addColumn('datetime', 'Date');
+            data.addColumn('number', 'C1');
+            data.addColumn('number', 'C2');
+            data.addColumn('number', 'C3');
+            data.addColumn('number', 'C4');
             data.addColumn('number', 'T keg');
             data.addColumn('number', 'T freezer');
-            data.addColumn('number', 'T other');
-            data.addColumn('number', 'T other');
-            data.addColumn('number', 'C1 heater on');
-            data.addColumn('number', 'C2 freezer off');
-            data.addColumn('number', 'C3 heater off');
-            data.addColumn('number', 'C4 freezer on');
-            data.addColumn('number', 'Freezer (off=30, on=40)');
-            data.addColumn('number', 'Heater (off=50, on=60)');
+            data.addColumn('number', 'T3');
+            data.addColumn('number', 'T4');
+            data.addColumn('number', 'Freezer (off=30, on=33)');
+            data.addColumn('number', 'Heater (off=35, on=38)');
             for (var i = 0; i < temperatureLogs.length; i++) {
               data.addRows([
                 [new Date(temperatureLogs[i].timestamp),
@@ -205,8 +205,8 @@
                   temperatureLogs[i].configTemperature3,
                   temperatureLogs[i].configTemperature4,
                   // null checks in case we are in a null temperature log used to break the line.
-                  (temperatureLogs[i].temperature1Keg != null ? (temperatureLogs[i].freezer ? 40 : 30) : null),
-                  (temperatureLogs[i].temperature1Keg != null ? (temperatureLogs[i].heater ? 60 : 50) : null)
+                  (temperatureLogs[i].temperature1Keg != null ? (temperatureLogs[i].freezer ? 33 : 30) : null),
+                  (temperatureLogs[i].temperature1Keg != null ? (temperatureLogs[i].heater ? 38 : 35) : null)
                 ]]);
             }
 
@@ -215,7 +215,7 @@
             var options = {
               displayAnnotations: false,
               thickness: 2,
-              colors: ["#3366CC", "#109618", "#FF9900", "#990099", "#CCCCCC", "#CCCCCC", "#CCCCCC", "#CCCCCC", "#66AA00", "#DC3912"]
+              colors: ["#CCCCCC", "#CCCCCC", "#CCCCCC", "#CCCCCC", "#3366CC", "#109618", "#FF9900", "#990099", "#66AA00", "#DC3912"]
             };
 
             chartAllData.draw(data, options);
@@ -370,7 +370,7 @@
               <div class="mdl-card__supporting-text">
                 <h4>Temperature Triggers Configuration</h4>
 
-                <my-app>Loading...</my-app>
+                <my-app>Loading... if configs don't appear within 10s, please reload the page.</my-app>
 
                 <h5>States</h5>
                 <ul>

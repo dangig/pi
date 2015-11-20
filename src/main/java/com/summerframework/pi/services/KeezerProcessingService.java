@@ -147,10 +147,8 @@ public class KeezerProcessingService {
 		}
 
 		// Take temperature readings.
-		// TODO: PUT BACK THIS ONE: BigDecimal temperature1 = temperatureReader.readThermometer1();
-		BigDecimal temperature1 = new BigDecimal(77.777);
-		//BigDecimal temperature2 = temperatureReader.readThermometer2();
-		BigDecimal temperature2 = new BigDecimal(78.888);
+		BigDecimal temperature1 = temperatureReader.readThermometer1();
+		BigDecimal temperature2 = temperatureReader.readThermometer2();
 		BigDecimal temperature3 = temperatureReader.readThermometer3();
 		BigDecimal temperature4 = temperatureReader.readThermometer4();
 		LOGGER.debug("Current date: [{}] ({}). We are in period: [{}]. Thermometer 1: [{}], Thermometer 2: [{}]", nowDate, now, state, temperature1, temperature2);
