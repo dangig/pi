@@ -24,7 +24,7 @@ export class ConfigFormComponent {
       // 3. Load model = new Config(..) with these values.
       self.model = config;
       self.resultsLoaded = true;
-    });
+    }, function(err) {console.log("An error occurred: " + err)}, function() {console.log("Config fetched.")});
 
 
   }
