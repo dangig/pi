@@ -25,7 +25,7 @@ spring.datasource.max-active=30
 # Used to check if we're running on the Raspberry Pi (real) or in development environment (stubbed)
 #DG: 000000003d8a5aac
 #JP: 00000000ede2bcf3
-pi.serial.number=000000003d8a5aac
+pi.serial.number=00000000ede2bcf3
 
 # Temperature commands
 # 28-041471b609ff is the one on phone cable
@@ -36,15 +36,15 @@ pi.serial.number=000000003d8a5aac
 # on-board, jp2 (celui au centre): 
 # boutte de telephone DG: 28-041471b609ff
 # lousse sur le board: 28-041471b487ff
-temperature.command.1=cat /sys/bus/w1/devices/28-041471b609ff/w1_slave
+temperature.command.1=cat /sys/bus/w1/devices/28-041471b344ff/w1_slave
 #cat /sys/bus/w1/devices/28-041471b344ff/w1_slave
-temperature.command.2=cat /sys/bus/w1/devices/28-041471b487ff/w1_slave
-temperature.command.3=
+temperature.command.2=cat /sys/bus/w1/devices/28-041471b629ff/w1_slave
+temperature.command.3=cat /sys/bus/w1/devices/28-03146d1bd5ff/w1_slave
 temperature.command.4=
 
 # Relay boards
 #DG: DAE002h9
 #JP1: DAE002oa
 #JP2: DAE002o9
-relayboard.serial.1=DAE002h9
-relayboard.serial.2=NOTAVAILABLE
+relayboard.serial.1=DAE002oa
+relayboard.serial.2=DAE002o9
