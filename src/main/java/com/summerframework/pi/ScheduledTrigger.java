@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.summerframework.pi.services.ErrorHandler;
+import com.summerframework.pi.services.HumidityReaderService;
 import com.summerframework.pi.services.KeezerProcessingService;
 
 public class ScheduledTrigger {
@@ -25,6 +26,9 @@ public class ScheduledTrigger {
 
 	@Autowired
 	private KeezerProcessingService keezerProcessingService;
+	
+	@Autowired
+	private HumidityReaderService humidityReaderService;
 
 	public void process() {
 		if (!isSpringContextInitialized()) {
@@ -43,7 +47,9 @@ public class ScheduledTrigger {
 			String executionId = "" + new Date();
 
 			// Scheduled services here.
-			keezerProcessingService.processKeezerAction(executionId);
+			// TODO: Re-enable. keezerProcessingService.processKeezerAction(executionId);
+			
+			humidityReaderService.processHumidityAction(executionId);
 
 		} catch (Exception e) {
 			// Catch if something goes wrong (e.g. server down or something) and
