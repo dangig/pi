@@ -100,6 +100,7 @@ public class HumidityReaderService {
 		try {
 
 			ssd1306.clear();
+			ssd1306.getGraphics().clearRect(0, 0, 127, 63);
 			ssd1306.getGraphics().setColor(Color.WHITE);
 			ssd1306.getGraphics().setFont(new Font("Monospaced", Font.PLAIN, 12));
 			ssd1306.getGraphics().drawRect(0, 0, 127, 63);
