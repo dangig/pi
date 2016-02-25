@@ -17,7 +17,7 @@ var ConfigFormComponent = (function () {
         // let's feed that with temporary values, until the real values are loaded
         this.resultsLoaded = false;
         // 2. Feed some temporary model so that it does not complain
-        this.model = new config_1.Config('2015-11-11T11:01', 1, 2, 3, 4, '2015-11-11T11:02', 5, 6, 7, 8, '2015-11-11T11:03', 9, 10, 11, 12, '2015-11-11T11:04');
+        this.model = new config_1.Config('2015-11-11T11:01', 1, 2, 3, 4, '2015-11-11T11:02', 5, 6, 7, 8, '2015-11-11T11:03', 9, 10, 11, 12, '2015-11-11T11:04', 9, 10, 11, 12, '2015-11-11T11:05', 9, 10, 11, 12, '2015-11-11T11:06', 9, 10, 11, 12, '2015-11-11T11:07', 9, 10, 11, 12, '2015-11-11T11:08', '2015-11-11T11:09');
         this.submitted = false;
         this.updateCompletedSuccessfully = false;
         this.updateCompletedWithErrors = false;

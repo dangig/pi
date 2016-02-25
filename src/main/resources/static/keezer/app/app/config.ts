@@ -15,6 +15,27 @@ export class Config {
     public td2: number,
     public td3: number,
     public td4: number,
-    public datee: string
+    public datee: string,
+    public te1: number,
+    public te2: number,
+    public te3: number,
+    public te4: number,
+    public datef: string,
+    public tf1: number,
+    public tf2: number,
+    public tf3: number,
+    public tf4: number,
+    public dateg: string,
+    public tg1: number,
+    public tg2: number,
+    public tg3: number,
+    public tg4: number,
+    public dateh: string,
+    public th1: number,
+    public th2: number,
+    public th3: number,
+    public th4: number,
+    public datei: string,
+    public datej: string
   ) {  }
 }

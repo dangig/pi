@@ -27,7 +27,8 @@ public class ScheduledTrigger {
 	@Autowired
 	private KeezerProcessingService keezerProcessingService;
 	
-	@Autowired
+	// TODO: Uncomment if using this service
+	// @Autowired
 	private HumidityReaderService humidityReaderService;
 
 	public void process() {
@@ -47,9 +48,9 @@ public class ScheduledTrigger {
 			String executionId = "" + new Date();
 
 			// Scheduled services here.
-			// TODO: Re-enable. keezerProcessingService.processKeezerAction(executionId);
+			keezerProcessingService.processKeezerAction(executionId);
 			
-			humidityReaderService.processHumidityAction(executionId);
+			//humidityReaderService.processHumidityAction(executionId);
 
 		} catch (Exception e) {
 			// Catch if something goes wrong (e.g. server down or something) and

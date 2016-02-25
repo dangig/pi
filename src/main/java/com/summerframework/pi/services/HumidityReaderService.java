@@ -27,7 +27,9 @@ import com.summerframework.pi.jpa.model.HumidityLogRepository;
  * 
  * Logs to database for monitoring
  */
-@Service
+
+//TODO: Uncomment if using this service
+// @Service
 public class HumidityReaderService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(HumidityReaderService.class);

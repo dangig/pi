@@ -179,12 +179,265 @@
           <tr>
             <td>
               <div class="form-group">
-                <label for="datee">Date E</label>
+                <label for="datee">Date E (Linear) </label>
                 <input type="datetime-local"  class="form-control" required style="width:232px"
                        [(ng-model)]="model.datee"
                        ng-control="datee"  #datee="form" >
                 <div [hidden]="datee.valid" class="alert alert-danger">
-                  Date D is required
+                  Date E is required
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <label for="te1">te1</label>
+                <input type="number"  step="0.01" class="form-control" style="width:78px"
+                       [(ng-model)]="model.te1"
+                       ng-control="te1"  #te1="form" >
+                <div [hidden]="te1.valid" class="alert alert-danger">
+                  te1 is required
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <label for="te2">te2</label>
+                <input type="number"  step="0.01" class="form-control" style="width:78px"
+                       [(ng-model)]="model.te2"
+                       ng-control="te2"  #te2="form" >
+                <div [hidden]="te2.valid" class="alert alert-danger">
+                  te2 is required
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <label for="te3">te3</label>
+                <input type="number"  step="0.01" class="form-control" style="width:78px"
+                       [(ng-model)]="model.te3"
+                       ng-control="te3"  #te3="form" >
+                <div [hidden]="te3.valid" class="alert alert-danger">
+                  te3 is required
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <label for="te4">te4</label>
+                <input type="number"  step="0.01" class="form-control" style="width:78px"
+                       [(ng-model)]="model.te4"
+                       ng-control="te4"  #te4="form" >
+                <div [hidden]="te4.valid" class="alert alert-danger">
+                  te4 is required
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="form-group">
+                <label for="datef">Date F</label>
+                <input type="datetime-local"  class="form-control" required style="width:232px"
+                       [(ng-model)]="model.datef"
+                       ng-control="datef"  #datef="form" >
+                <div [hidden]="datef.valid" class="alert alert-danger">
+                  Date F is required
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <label for="tf1">tf1</label>
+                <input type="number"  step="0.01" class="form-control" style="width:78px"
+                       [(ng-model)]="model.tf1"
+                       ng-control="tf1"  #tf1="form" >
+                <div [hidden]="tf1.valid" class="alert alert-danger">
+                  tf1 is required
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <label for="tf2">tf2</label>
+                <input type="number"  step="0.01" class="form-control" style="width:78px"
+                       [(ng-model)]="model.tf2"
+                       ng-control="tf2"  #tf2="form" >
+                <div [hidden]="tf2.valid" class="alert alert-danger">
+                  tf2 is required
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <label for="tf3">tf3</label>
+                <input type="number"  step="0.01" class="form-control" style="width:78px"
+                       [(ng-model)]="model.tf3"
+                       ng-control="tf3"  #tf3="form" >
+                <div [hidden]="tf3.valid" class="alert alert-danger">
+                  tf3 is required
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <label for="tf4">tf4</label>
+                <input type="number"  step="0.01" class="form-control" style="width:78px"
+                       [(ng-model)]="model.tf4"
+                       ng-control="tf4"  #tf4="form" >
+                <div [hidden]="tf4.valid" class="alert alert-danger">
+                  tf4 is required
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="form-group">
+                <label for="dateg">Date G (Linear)</label>
+                <input type="datetime-local"  class="form-control" required style="width:232px"
+                       [(ng-model)]="model.dateg"
+                       ng-control="dateg"  #dateg="form" >
+                <div [hidden]="dateg.valid" class="alert alert-danger">
+                  Date G is required
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <label for="tg1">tg1</label>
+                <input type="number"  step="0.01" class="form-control" style="width:78px"
+                       [(ng-model)]="model.tg1"
+                       ng-control="tg1"  #tg1="form" >
+                <div [hidden]="tg1.valid" class="alert alert-danger">
+                  tg1 is required
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <label for="tg2">tg2</label>
+                <input type="number"  step="0.01" class="form-control" style="width:78px"
+                       [(ng-model)]="model.tg2"
+                       ng-control="tg2"  #tg2="form" >
+                <div [hidden]="tg2.valid" class="alert alert-danger">
+                  tg2 is required
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <label for="tg3">tg3</label>
+                <input type="number"  step="0.01" class="form-control" style="width:78px"
+                       [(ng-model)]="model.tg3"
+                       ng-control="tg3"  #tg3="form" >
+                <div [hidden]="tg3.valid" class="alert alert-danger">
+                  tg3 is required
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <label for="tg4">tg4</label>
+                <input type="number"  step="0.01" class="form-control" style="width:78px"
+                       [(ng-model)]="model.tg4"
+                       ng-control="tg4"  #tg4="form" >
+                <div [hidden]="tg4.valid" class="alert alert-danger">
+                  tg4 is required
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="form-group">
+                <label for="dateh">Date H</label>
+                <input type="datetime-local"  class="form-control" required style="width:232px"
+                       [(ng-model)]="model.dateh"
+                       ng-control="dateh"  #dateh="form" >
+                <div [hidden]="dateh.valid" class="alert alert-danger">
+                  Date H is required
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <label for="th1">th1</label>
+                <input type="number"  step="0.01" class="form-control" style="width:78px"
+                       [(ng-model)]="model.th1"
+                       ng-control="th1"  #th1="form" >
+                <div [hidden]="th1.valid" class="alert alert-danger">
+                  th1 is required
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <label for="th2">th2</label>
+                <input type="number"  step="0.01" class="form-control" style="width:78px"
+                       [(ng-model)]="model.th2"
+                       ng-control="th2"  #th2="form" >
+                <div [hidden]="th2.valid" class="alert alert-danger">
+                  th2 is required
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <label for="th3">th3</label>
+                <input type="number"  step="0.01" class="form-control" style="width:78px"
+                       [(ng-model)]="model.th3"
+                       ng-control="th3"  #th3="form" >
+                <div [hidden]="th3.valid" class="alert alert-danger">
+                  th3 is required
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <label for="th4">th4</label>
+                <input type="number"  step="0.01" class="form-control" style="width:78px"
+                       [(ng-model)]="model.th4"
+                       ng-control="th4"  #th4="form" >
+                <div [hidden]="th4.valid" class="alert alert-danger">
+                  th4 is required
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="form-group">
+                <label for="datei">Date I</label>
+                <input type="datetime-local"  class="form-control" required style="width:232px"
+                       [(ng-model)]="model.datei"
+                       ng-control="datei"  #datei="form" >
+                <div [hidden]="datei.valid" class="alert alert-danger">
+                  Date I is required
+                </div>
+              </div>
+            </td>
+            <td>
+
+            </td>
+            <td>
+
+            </td>
+            <td>
+
+            </td>
+            <td>
+
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="form-group">
+                <label for="datej">Date J (at least 1 min after Date I)</label>
+                <input type="datetime-local"  class="form-control" required style="width:232px"
+                       [(ng-model)]="model.datej"
+                       ng-control="datej"  #datej="form" >
+                <div [hidden]="datej.valid" class="alert alert-danger">
+                  Date J is required
                 </div>
               </div>
             </td>
@@ -278,6 +531,90 @@
     <div class="row">
       <div class="col-xs-3">Date E</div>
       <div class="col-xs-9 pull-left">{{ model.datee }}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">te1</div>
+      <div class="col-xs-9  pull-left">{{ model.te1 }}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">te2</div>
+      <div class="col-xs-9  pull-left">{{ model.te2 }}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">te3</div>
+      <div class="col-xs-9  pull-left">{{ model.te3 }}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">te4</div>
+      <div class="col-xs-9  pull-left">{{ model.te4 }}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">Date F</div>
+      <div class="col-xs-9 pull-left">{{ model.datef }}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">tf1</div>
+      <div class="col-xs-9  pull-left">{{ model.tf1 }}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">tf2</div>
+      <div class="col-xs-9  pull-left">{{ model.tf2 }}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">tf3</div>
+      <div class="col-xs-9  pull-left">{{ model.tf3 }}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">tf4</div>
+      <div class="col-xs-9  pull-left">{{ model.tf4 }}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">Date G</div>
+      <div class="col-xs-9 pull-left">{{ model.dateg }}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">tg1</div>
+      <div class="col-xs-9  pull-left">{{ model.tg1 }}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">tg2</div>
+      <div class="col-xs-9  pull-left">{{ model.tg2 }}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">tg3</div>
+      <div class="col-xs-9  pull-left">{{ model.tg3 }}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">tg4</div>
+      <div class="col-xs-9  pull-left">{{ model.tg4 }}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">Date H</div>
+      <div class="col-xs-9 pull-left">{{ model.dateh }}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">th1</div>
+      <div class="col-xs-9  pull-left">{{ model.th1 }}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">th2</div>
+      <div class="col-xs-9  pull-left">{{ model.th2 }}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">th3</div>
+      <div class="col-xs-9  pull-left">{{ model.th3 }}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">th4</div>
+      <div class="col-xs-9  pull-left">{{ model.th4 }}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">Date I</div>
+      <div class="col-xs-9 pull-left">{{ model.datei }}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">Date J</div>
+      <div class="col-xs-9 pull-left">{{ model.datej }}</div>
     </div>
     <br>
     <h2>Results:</h2>
