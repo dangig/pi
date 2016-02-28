@@ -7,6 +7,7 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
@@ -54,9 +55,17 @@ public class KeezerProcessingService {
 	@Autowired
 	private TemperatureChartHelper temperatureChartHelper;
 
-	public void initTurnAllRelaysOff() {
-		LOGGER.debug("Turning all relays off. (Assumption on the start of program).");
-		relayManager.turnRelayStateForAllRelays(1, false);
+	@Value("${keezer.relayFreezer}")
+	private int keezerRelayFreezer;
+
+	@Value("${keezer.relayHeater}")
+	private int keezerRelayHeater;
+
+	public void initTurnFreezerAndHeaterRelaysOff() {
+		LOGGER.debug("Turning freezer and heater relays off. (Assumption on the start of program).");
+		// relayManager.turnRelayStateForAllRelays(1, false);
+		relayManager.turnRelayState(1, keezerRelayFreezer, false);
+		relayManager.turnRelayState(1, keezerRelayHeater, false);
 		sleep(1000);
 	}
 
@@ -234,8 +243,8 @@ public class KeezerProcessingService {
 		// Prepare temperature log to save to DB later
 		TemperatureLog temperatureLog = new TemperatureLog();
 		temperatureLog.setTimestamp(now);
-		temperatureLog.setFreezer(relayManager.getR11().get());
-		temperatureLog.setHeater(relayManager.getR12().get());
+		temperatureLog.setFreezer(relayManager.getRelayFreezer().get());
+		temperatureLog.setHeater(relayManager.getRelayHeater().get());
 		temperatureLog.setState(state);
 		temperatureLog.setTemperature1Keg(temperature1);
 		temperatureLog.setTemperature2Freezer(temperature2);
@@ -246,8 +255,11 @@ public class KeezerProcessingService {
 
 		switch (state) {
 		case "A":
-			// Do nothing. Period not started. Set all relays off.
-			relayManager.turnRelayStateForAllRelays(1, false);
+			// Do nothing. Period not started. Set freezer and heater relays
+			// off.
+			// relayManager.turnRelayStateForAllRelays(1, false);
+			relayManager.turnRelayState(1, keezerRelayFreezer, false);
+			relayManager.turnRelayState(1, keezerRelayHeater, false);
 			sleep(1000);
 			break;
 
@@ -280,8 +292,10 @@ public class KeezerProcessingService {
 			break;
 
 		case "I":
-			// Do nothing. Period is over. Set all relays off.
-			relayManager.turnRelayStateForAllRelays(1, false);
+			// Do nothing. Period is over. Set freezer and heater relays off.
+			// relayManager.turnRelayStateForAllRelays(1, false);
+			relayManager.turnRelayState(1, keezerRelayFreezer, false);
+			relayManager.turnRelayState(1, keezerRelayHeater, false);
 			sleep(1000);
 			break;
 
@@ -339,43 +353,43 @@ public class KeezerProcessingService {
 		temperatureLog.setConfigTemperature3(temp3);
 		temperatureLog.setConfigTemperature4(temp4);
 
-		LOGGER.debug("Currently, freezer is [{}] and heater is [{}]", relayManager.getR11().get(), relayManager.getR12().get());
+		LOGGER.debug("Currently, freezer is [{}] and heater is [{}]", relayManager.getRelayFreezer().get(), relayManager.getRelayHeater().get());
 		LOGGER.debug("Keg temperature is [{}]", temperatureKeg);
 		if (temperatureKeg.compareTo(temp1) < 0) {
 			LOGGER.debug("Keg temperature is therefore below temp1 [{}]. Freezer: OFF, Heat: ON.", temp1);
-			if (relayManager.getR11().get() == true) {
-				relayManager.turnRelayState(1, 1, false); // If freezer is on
+			if (relayManager.getRelayFreezer().get() == true) {
+				relayManager.turnRelayState(1, keezerRelayFreezer, false); // If freezer is on
 															// ==> Set Freezer
 															// OFF
 			}
-			if (relayManager.getR12().get() == false) {
+			if (relayManager.getRelayHeater().get() == false) {
 				sleep(2000);
-				relayManager.turnRelayState(1, 2, true); // If heat is off ==>
+				relayManager.turnRelayState(1, keezerRelayHeater, true); // If heat is off ==>
 															// Set Heat ON
 			}
 
 		} else if (temperatureKeg.compareTo(temp2) < 0) {
 			LOGGER.debug("Keg temperature is therefore between temp1 [{}] and temp2 [{}]. Freezer: OFF, Heat: No change.", temp1, temp2);
-			if (relayManager.getR11().get() == true) {
-				relayManager.turnRelayState(1, 1, false); // If freezer is on
+			if (relayManager.getRelayFreezer().get() == true) {
+				relayManager.turnRelayState(1, keezerRelayFreezer, false); // If freezer is on
 															// ==> Freezer OFF
 			}
 		} else if (temperatureKeg.compareTo(temp3) < 0) {
 			LOGGER.debug("Keg temperature is therefore between temp2 [{}] and temp3 [{}]. Freezer: No change, Heat: No change.", temp2, temp3);
 		} else if (temperatureKeg.compareTo(temp4) < 0) {
 			LOGGER.debug("Keg temperature is therefore between temp3 [{}] and temp4 [{}]. Freezer: No change, Heat: OFF", temp3, temp4);
-			if (relayManager.getR12().get() == true) {
-				relayManager.turnRelayState(1, 2, false);
+			if (relayManager.getRelayHeater().get() == true) {
+				relayManager.turnRelayState(1, keezerRelayHeater, false);
 			}
 		} else {
 			LOGGER.debug("Keg temperature is therefore higher than temp4 [{}]. Freezer: ON, Heat: OFF.", temp4);
-			if (relayManager.getR12().get() == true) {
-				relayManager.turnRelayState(1, 2, false); // If heat is on ==>
+			if (relayManager.getRelayHeater().get() == true) {
+				relayManager.turnRelayState(1, keezerRelayHeater, false); // If heat is on ==>
 															// Heat OFF
 			}
-			if (relayManager.getR11().get() == false) {
+			if (relayManager.getRelayFreezer().get() == false) {
 				sleep(2000);
-				relayManager.turnRelayState(1, 1, true); // If freezer is off
+				relayManager.turnRelayState(1, keezerRelayFreezer, true); // If freezer is off
 															// ==> Freezer ON
 			}
 

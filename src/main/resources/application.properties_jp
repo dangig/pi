@@ -33,7 +33,7 @@ pi.serial.number=00000000ede2bcf3
 # IMPORTANT: The thermometer #1 is the one controlling relays.
 # boutte de telephone JP: 28-041471b344ff
 # on-board, JP: 28-041471b629ff
-# on-board, jp2 (celui au centre): 
+# on-board, jp2 (celui au centre): 28-03146d1bd5ff
 # boutte de telephone DG: 28-041471b609ff
 # lousse sur le board: 28-041471b487ff
 temperature.command.1=cat /sys/bus/w1/devices/28-041471b344ff/w1_slave

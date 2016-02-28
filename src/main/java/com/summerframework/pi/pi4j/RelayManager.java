@@ -1,6 +1,13 @@
 package com.summerframework.pi.pi4j;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.RandomAccessFile;
+import java.io.Reader;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.lang.StringUtils;
@@ -24,6 +31,8 @@ public class RelayManager {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RelayManager.class);
 
+	public static final String SHARED_MUTEX_FILE = "relaymutex.txt";
+	
 	@Autowired
 	GpioSingleton gpioSingleton;
 
@@ -43,9 +52,45 @@ public class RelayManager {
 	private AtomicBoolean r23 = new AtomicBoolean(false);
 	private AtomicBoolean r24 = new AtomicBoolean(false);
 
-	public synchronized void turnRelayState(int relayBoard, int relayNumber, boolean onOrOffBoolean) {
-		// LOGGER.debug("Turning On " + relayNumber);
+	@Value("${keezer.relayFreezer}")
+	private int keezerRelayFreezer;
 
+	@Value("${keezer.relayHeater}")
+	private int keezerRelayHeater;
+	
+	public synchronized void turnRelayState(int relayBoard, int relayNumber, boolean onOrOffBoolean) {
+		// call to drcontrol is not thread safe (tested). Need to hold shared
+		// mutex.
+
+		LOGGER.debug("About to aquire lock to make a change to a relay");
+
+		try {
+			File file = new File(SHARED_MUTEX_FILE);
+			FileChannel channel = new RandomAccessFile(file, "rw").getChannel();
+
+			// Use the file channel to create a lock on the file.
+			// This method blocks until it can retrieve the lock.
+			FileLock lock = channel.lock();
+
+			// perform operation
+			turnRelayStatePrivate(relayBoard, relayNumber, onOrOffBoolean);
+
+			// Release the lock - if it is not null!
+			if (lock != null) {
+				lock.release();
+			}
+
+			// Close the file
+			channel.close();
+		} catch (Exception e) {
+			throw new IllegalStateException(e);
+		}
+
+	}
+	
+	private void turnRelayStatePrivate(int relayBoard, int relayNumber, boolean onOrOffBoolean) {
+		// LOGGER.debug("Turning On " + relayNumber);
+		
 		switch (relayBoard) {
 		case 1:
 			// RELAY BOARD #1
@@ -219,6 +264,14 @@ public class RelayManager {
 
 	}
 
+	/**
+	 * Do not use, as other applications can use other relays.
+	 * 
+	 * @param relayBoard
+	 * @param onOrOffBoolean
+	 * 
+	 * @deprecated
+	 */
 	public synchronized void turnRelayStateForAllRelays(int relayBoard, boolean onOrOffBoolean) {
 		// LOGGER.debug("Turning On " + relayNumber);
 
@@ -303,36 +356,26 @@ public class RelayManager {
 
 	}
 
-	public AtomicBoolean getR11() {
-		return r11;
+	public AtomicBoolean getRelayFreezer() {
+		// Just return the state of the relay for freezer
+		if (keezerRelayFreezer == 1) {
+			return r11;
+		} else if (keezerRelayFreezer == 3) {
+			return r13;
+		} else {
+			throw new IllegalStateException("Freezer must be on relay 1 or 3.");
+		}
 	}
-
-	public AtomicBoolean getR12() {
-		return r12;
-	}
-
-	public AtomicBoolean getR13() {
-		return r13;
-	}
-
-	public AtomicBoolean getR14() {
-		return r14;
-	}
-
-	public AtomicBoolean getR21() {
-		return r21;
-	}
-
-	public AtomicBoolean getR22() {
-		return r22;
-	}
-
-	public AtomicBoolean getR23() {
-		return r23;
-	}
-
-	public AtomicBoolean getR24() {
-		return r24;
+	
+	public AtomicBoolean getRelayHeater() {
+		// Just return the state of the relay for heater
+		if (keezerRelayHeater == 2) {
+			return r12;
+		} else if (keezerRelayHeater == 4) {
+			return r14;
+		} else {
+			throw new IllegalStateException("Heater must be on relay 2 or 4.");
+		}
 	}
 
 }
